@@ -1,9 +1,7 @@
 ---
-title: "Darwin Core mapping"
-subtitle: "For: my_dataset_title"
+title: "Darwin Core mapping of VMM macrophytes data"
 author:
-- author_1
-- author_2
+- Damiano Oldoni
 date: "`r Sys.Date()`"
 output:
   html_document:
@@ -12,12 +10,9 @@ output:
     toc: yes
     toc_depth: 3
     toc_float: yes
-#  pdf_document:
-#    df_print: kable
-#    number_sections: yes
-#    toc: yes
-#    toc_depth: 3
 ---
+
+This document describes how (and contains the code to) transform the mcrophytes data of the [Flanders Environment Agency](https://en.vmm.be/) (VMM) to a [Darwin Core Archive](https://ipt.gbif.org/manual/en/ipt/2.5/dwca-guide) that can be uploaded to an [IPT](https://ipt.gbif.org/manual/en/ipt/2.5/).
 
 # Setup 
 
@@ -25,11 +20,11 @@ output:
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = TRUE)
 ```
 
-Install required libraries (only if the libraries have not been installed before):
+Install required libraries (if not yet installed):
 
-```{r}
+```{r install_pkgs}
 installed <- rownames(installed.packages())
-required <- c("tidyverse", "tidylog", "magrittr", "here", "janitor", "readxl", "digest", "rgbif")
+required <- c("magrittr", "here", "glue", "readxl", "DBI", "RSQLite", "sf")
 if (!all(required %in% installed)) {
   install.packages(required[!required %in% installed])
 }
@@ -37,435 +32,113 @@ if (!all(required %in% installed)) {
 
 Load libraries:
 
-```{r message = FALSE}
-library(tidyverse)      # To do data science
-library(tidylog)        # To provide feedback on dplyr functions
-library(magrittr)       # To use %<>% pipes
+```{r load_pkgs, message = FALSE}
+library(magrittr)       # To use pipes
 library(here)           # To find files
-library(janitor)        # To clean input data
-library(readxl)         # To read Excel files
-library(digest)         # To generate hashes
-library(rgbif)          # To use GBIF services
+library(glue)           # To insert variables in strings
+library(readxl)         # To write files
+library(DBI)            # To create and query databases
+library(RSQLite)        # To work with SQLite databases in R
+library(sf)             # To work with spatial data
 ```
 
 # Read source data
 
-Create a data frame `input_data` from the source data:
+The source data were provided manually and stored in `data/raw`. If this workflow can be fully automated, replace with querying from VMm endpoints.
 
-```{r}
-input_data <- read_excel(path = here("data", "raw", "checklist.xlsx")) 
+Read source files:
+
+```{r read_raw_data}
+# All columns are read as characters for easier import into SQLite: https://stackoverflow.com/a/13462536/2463806
+raw_data_filename <- "macrofyten 2022-03-10T13_18_15.337Z.xlsx"
+observations <- readxl::read_xlsx(
+  here::here("data", "raw", raw_data_filename),
+  sheet = "opnames_lijst") %>% 
+  mutate(across(everything(), as.character))
+vegetations <- readxl::read_xlsx(
+  path = here::here("data", "raw", raw_data_filename),
+  sheet = "vegetatie-ontwikkeling")  %>% 
+  mutate(across(everything(), as.character))
+positions <- readxl::read_xlsx(
+  here::here("data", "raw", raw_data_filename),
+  sheet = "meetplaatsen")  %>% 
+  mutate(across(everything(), as.character))
+features <- readxl::read_xlsx(
+  here::here("data", "raw", raw_data_filename),
+  sheet = "kenmerken")  %>% 
+  mutate(across(everything(), as.character))
+measurements <- readxl::read_xlsx(
+  here::here("data", "raw", raw_data_filename),
+  sheet = "veldmetingen (FC)")  %>% 
+  mutate(across(everything(), as.character))
+ecologic_coeffs <- readxl::read_xlsx(
+  here::here("data", "raw", raw_data_filename),
+  sheet = "EKC MAF")  %>% 
+  mutate(across(everything(), as.character))
 ```
 
-Preview data:
+## Calculate geographical coordinates in WGS 84
 
-```{r}
-input_data %>% head(n = 5)
+We retrieved the coordinates in [WGS 84](https://epsg.io/4326) (EPSG:4326) based on the original coordinates in [Belgian Lambert 72](https://epsg.io/31370) (EPSG:31370):
+
+```{r transform_to_wgs84}
+positions <- positions %>%
+  st_as_sf(coords = c("X", "Y"), crs = 31370) %>%
+  st_transform(crs = 4326) %>%
+  st_coordinates() %>%
+  as.data.frame() %>%
+  rename(decimalLongitude = X,
+         decimalLatitude = Y) %>%
+  bind_cols(positions) %>%
+  relocate(colnames(positions))
+head(positions)
 ```
 
-# Process source data
+## Create database
 
-## Tidy data
+Create a SQLite database with the source data, so it can be queried with SQL in the next steps:
 
-Clean data somewhat:
-
-```{r}
-input_data %<>% remove_empty("rows")
+```{r create_db}
+macrophytes_db <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+# Import data
+DBI::dbWriteTable(macrophytes_db, "observations", observations)
+DBI::dbWriteTable(macrophytes_db, "vegetations", vegetations)
+DBI::dbWriteTable(macrophytes_db, "positions", positions)
+DBI::dbWriteTable(macrophytes_db, "features", features)
+DBI::dbWriteTable(macrophytes_db, "measurements", measurements)
+DBI::dbWriteTable(macrophytes_db, "ecologic_coeffs", ecologic_coeffs)
+# Add regular expression operator 
+RSQLite::initRegExp(macrophytes_db)
 ```
 
-## Scientific names
 
-Use the [GBIF nameparser](https://www.gbif.org/tools/name-parser) to retrieve nomenclatural information for the scientific names in the checklist:
+## Darwin Core mapping
 
-```{r}
-parsed_names <- input_data %>%
-  distinct(scientific_name) %>%
-  pull() %>% # Create vector from dataframe
-  parsenames() # An rgbif function
+Create [Event](https://rs.gbif.org/core/dwc_event_2022-02-02.xml) core:
+
+```{r event}
+dwc_event_sql <- glue::glue_sql(readr::read_file(here::here("sql", "dwc_event.sql")), .con = macrophytes_db)
+dwc_event <- DBI::dbGetQuery(macrophytes_db, dwc_event_sql)
 ```
 
-Show scientific names with nomenclatural issues, i.e. not of `type = SCIENTIFIC` or that could not be fully parsed. Note: these are not necessarily incorrect.
+Create [Occurrence](https://rs.gbif.org/core/dwc_occurrence_2022-02-02.xml) extension:
 
-```{r}
-parsed_names %>%
-  select(scientificname, type, parsed, parsedpartially, rankmarker) %>%
-  filter(!(type == "SCIENTIFIC" & parsed == "TRUE" & parsedpartially == "FALSE"))
+```{r occurrence}
+dwc_occurrence_sql <- glue::glue_sql(readr::read_file(here::here("sql", "dwc_occurrence.sql")), .con = macrophytes_db)
+dwc_occurrence <- DBI::dbGetQuery(macrophytes_db, dwc_occurrence_sql)
 ```
 
-Correct names and reparse:
-
-```{r correct and reparse}
-input_data %<>% mutate(scientific_name = recode(scientific_name,
-  "AseroÙ rubra" = "Asero rubra"
-))
-
-# Redo parsing
-parsed_names <- input_data %>%
-  distinct(scientific_name) %>%
-  pull() %>%
-  parsenames()
-
-# Show names with nomenclatural issues again
-parsed_names %>%
-  select(scientificname, type, parsed, parsedpartially, rankmarker) %>%
-  filter(!(type == "SCIENTIFIC" & parsed == "TRUE" & parsedpartially == "FALSE"))
-```
-
-## Taxon ranks
-
-The nameparser function also provides information about the rank of the taxon (in `rankmarker`). Here we join this information with our checklist. Cleaning these ranks will done in the Taxon Core mapping:
+Create [Measurement Or Facts](https://rs.gbif.org/extension/dwc/measurements_or_facts_2022-02-02.xml) extension:
 
 ```{r}
-input_data %<>% left_join(
-  parsed_names %>%
-  select(scientificname, rankmarker),
-  by = c("scientific_name" = "scientificname"))
+dwc_mof_sql <- glue::glue_sql(readr::read_file(here::here("sql", "dwc_mof.sql")), .con = macrophytes_db)
+dwc_mof <- DBI::dbGetQuery(macrophytes_db, dwc_mof_sql)
 ```
 
-## Taxon IDs
-
-To link taxa with information in the extension(s), each taxon needs a unique and relatively stable `taxonID`. Here we create one in the form of `dataset_shortname:taxon:hash`, where `hash` is unique code based on scientific name and kingdom (that will remain the same as long as scientific name and kingdom remain the same):
-
-```{r}
-vdigest <- Vectorize(digest) # Vectorize digest function to work with vectors
-input_data %<>% mutate(taxon_id = paste(
-  "my_dataset_shortname", # e.g. "alien-fishes-checklist"
-  "taxon",
-  vdigest(paste(scientific_name, kingdom), algo = "md5"),
-  sep = ":"
-))
-```
-
-## Preview data
-
-Show the number of taxa and distributions per kingdom and rank:
-
-```{r}
-input_data %>%
-  group_by(kingdom, rankmarker) %>%
-  summarize(
-    `# taxa` = n_distinct(taxon_id),
-    `# distributions` = n()
-  ) %>%
-  adorn_totals("row")
-```
-
-Preview data:
-
-```{r}
-input_data %>% head()
-```
-
-# Taxon core
-
-## Pre-processing
-
-Create a dataframe with unique taxa only (ignoring multiple distribution rows):
-
-```{r}
-taxon <- input_data %>% distinct(taxon_id, .keep_all = TRUE)
-```
-
-## Term mapping
-
-Map the data to [Darwin Core Taxon](http://rs.gbif.org/core/dwc_taxon_2015-04-24.xml).
-
-Start with record-level terms which contain metadata about the dataset (which is generally the same for all records).
-
-### language
-
-```{r}
-taxon %<>% mutate(dwc_language = "my_language") # e.g. "en"
-```
-
-### license
-
-```{r}
-taxon %<>% mutate(dwc_license = "my_license") # e.g. "http://creativecommons.org/publicdomain/zero/1.0/"
-```
-
-### rightsHolder
-
-```{r}
-taxon %<>% mutate(dwc_rightsHolder = "my_rights_holder") # e.g. "INBO"
-```
-
-### datasetID
-
-```{r}
-taxon %<>% mutate(dwc_datasetID = "my_dataset_doi") # e.g. "https://doi.org/10.15468/xvuzfh"
-```
-
-### institutionCode
-
-```{r}
-taxon %<>% mutate(dwc_institutionCode = "my_institution_code") # e.g. "INBO"
-```
-
-### datasetName
-
-```{r}
-taxon %<>% mutate(dwc_datasetName = "my_dataset_title") # e.g. "Checklist of non-native freshwater fishes in Flanders, Belgium"
-```
-
-The following terms contain information about the taxon:
-
-### taxonID
-
-```{r}
-taxon %<>% mutate(dwc_taxonID = taxon_id)
-```
-
-### scientificName
-
-```{r}
-taxon %<>% mutate(dwc_scientificName = scientific_name)
-```
-
-### kingdom
-
-Inspect values:
-
-```{r}
-taxon %>%
-  group_by(kingdom) %>%
-  count()
-```
-
-Map values:
-
-```{r}
-taxon %<>% mutate(dwc_kingdom = kingdom)
-```
-
-### taxonRank
-
-Inspect values:
-
-```{r}
-taxon %>%
-  group_by(rankmarker) %>%
-  count()
-```
-
-Map values by recoding to the [GBIF rank vocabulary](http://rs.gbif.org/vocabulary/gbif/rank_2015-04-24.xml):
-
-```{r}
-taxon %<>% mutate(dwc_taxonRank = recode(rankmarker,
-  "agg."      = "speciesAggregate",
-  "infrasp."  = "infraspecificname",
-  "sp."       = "species",
-  "var."      = "variety",
-  .default    = "",
-  .missing    = ""
-))
-```
-
-Inspect mapped values: 
-
-```{r}
-taxon %>%
-  group_by(rankmarker, dwc_taxonRank) %>%
-  count()
-```
-
-### nomenclaturalCode
-
-```{r}
-taxon %<>% mutate(dwc_nomenclaturalCode = "my_nomenclaturalCode") # e.g. "ICZN"
-```
-
-## Post-processing
-
-Only keep the Darwin Core columns:
-
-```{r}
-taxon %<>% select(starts_with("dwc_"))
-```
-
-Drop the `dwc_` prefix:
-
-```{r}
-colnames(taxon) <- str_remove(colnames(taxon), "dwc_")
-```
-
-Preview data:
-
-```{r}
-taxon %>% head()
-```
-
-Save to CSV:
-
-```{r}
-write_csv(taxon, here("data", "processed", "taxon.csv"), na = "")
-```
-
-# Distribution extension
-
-## Pre-processing
-
-Create a dataframe with all data:
-
-```{r}
-distribution <- input_data
-```
-
-## Term mapping
-
-Map the data to [Species Distribution](http://rs.gbif.org/extension/gbif/1.0/distribution.xml).
-
-### taxonID
-
-```{r}
-distribution %<>% mutate(dwc_taxonID = taxon_id)
-```
-
-### locality
-
-Inspect values:
-
-```{r}
-distribution %>%
-  group_by(country_code, locality) %>%
-  count()
-```
-
-Map values to `locality` if provided, otherwise use the country name:
-
-```{r}
-distribution %<>% mutate(dwc_locality = case_when(
-  !is.na(locality) ~ locality,
-  country_code == "BE" ~ "Belgium",
-  country_code == "GB" ~ "United Kingdom",
-  country_code == "MK" ~ "Macedonia",
-  country_code == "NL" ~ "The Netherlands",
-  TRUE ~ "" # In other cases leave empty
-))
-```
-
-Inspect mapped values: 
-
-```{r}
-distribution %>%
-  group_by(country_code, locality, dwc_locality) %>%
-  count()
-```
-
-### countryCode
-
-Inspect values:
-
-```{r}
-distribution %>%
-  group_by(country_code) %>%
-  count()
-```
-
-Map values:
-
-```{r}
-distribution %<>% mutate(dwc_countryCode = country_code) 
-```
-
-### occurrenceStatus
-
-Inspect values:
-
-```{r}
-distribution %>%
-  group_by(occurrence_status) %>%
-  count()
-```
-
-Map values:
-
-```{r}
-distribution %<>% mutate(dwc_occurrenceStatus = occurrence_status) 
-```
-
-### threatStatus
-
-Inspect values:
-
-```{r}
-distribution %>%
-  group_by(threat_status) %>%
-  count()
-```
-
-Map values by recoding to the [IUCN threat status vocabulary](http://rs.gbif.org/vocabulary/iucn/threat_status.xml):
-
-```{r}
-distribution %<>% mutate(dwc_threatStatus = recode(threat_status,
-  "endangered" = "EN",
-  "vulnerable" = "VU"
-))
-```
-
-Inspect mapped values: 
-
-```{r}
-distribution %>%
-  group_by(threat_status, dwc_threatStatus) %>%
-  count()
-```
-
-### source
-
-Inspect values:
-
-```{r}
-distribution %>%
-  group_by(source) %>%
-  count() %>%
-  head() # Remove to show all values
-```
-
-Map values:
-
-```{r}
-distribution %<>% mutate(dwc_source = source) 
-```
-
-### occurrenceRemarks
-
-Inspect values:
-
-```{r}
-distribution %>%
-  group_by(remarks) %>%
-  count() %>%
-  head() # Remove to show all values
-```
-
-Map values:
-
-```{r}
-distribution %<>% mutate(dwc_occurrenceRemarks = remarks) 
-```
-
-## Post-processing
-
-Only keep the Darwin Core columns:
-
-```{r}
-distribution %<>% select(starts_with("dwc_"))
-```
-
-Drop the `dwc_` prefix:
-
-```{r}
-colnames(distribution) <- str_remove(colnames(distribution), "dwc_")
-```
-
-Preview data:
-
-```{r}
-distribution %>% head()
-```
-
-Save to CSV:
-
-```{r}
-write_csv(distribution, here("data", "processed", "distribution.csv"), na = "")
+## Save data to CSV
+
+```{r save_csv}
+write_csv(dwc_event, here::here("data", "processed", "event.csv"), na = "")
+write_csv(dwc_occurrence, here::here("data", "processed", "occurrence.csv"), na = "")
+write_csv(dwc_mof, here::here("data", "processed", "mof.csv"), na = "")
 ```
