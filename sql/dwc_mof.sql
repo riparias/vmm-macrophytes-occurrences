@@ -277,7 +277,7 @@ UNION
 
 SELECT
   v.deelmonster_id || ':' || v.interval       AS eventID,
-  v.deelmonster_id || ':' || 'submerged_code' AS measurementID,
+  v.deelmonster_id || ':' || v.interval || ':' || 'submerged_code' AS measurementID,
   'submerged code'                            AS measurementType,
   v.'Submers Code'                            AS measurementValue,
   NULL                                        AS measurementUnit,
@@ -291,7 +291,7 @@ UNION
 
 SELECT
   v.deelmonster_id || ':' || v.interval       AS eventID,
-  v.deelmonster_id || ':' || 'submerged_category' AS measurementID,
+  v.deelmonster_id || ':' || v.interval || ':' || 'submerged_category' AS measurementID,
   'submerged category'                            AS measurementType,
   CASE 
     WHEN v.submers = 'geen ondergedoken vegetatie' 
