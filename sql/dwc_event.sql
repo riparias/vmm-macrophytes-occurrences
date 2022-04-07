@@ -22,6 +22,7 @@ SELECT
   f.deelmonster_id                      AS eventID,
   NULL                                  AS parentEventID,
   date(f.monsternamedatum)              AS eventDate,
+  f.Jaar                                AS year,    
   NULL                                  AS eventRemarks,
 -- LOCATION
   p.meetplaats                          AS locationID,
@@ -80,6 +81,7 @@ SELECT
   v.deelmonster_id || ':' || v.interval             AS eventID,
   v.deelmonster_id                                  AS parentEventID,
   NULL                                              AS eventDate,
+  NULL                                              AS year,
   v.opmerking                                       AS eventRemarks,
 -- LOCATION
   NULL                                              AS locationID,
