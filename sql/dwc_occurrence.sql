@@ -31,7 +31,7 @@ SELECT
     ELSE o.'Tansley Code'
   END                                         AS organismQuantity,
   'Tansley vegetation scale'                  AS organismQuantityType,
-  o.groeivorm                                 AS occurrenceRemarksProperty,
+  o.groeivorm                                 AS occurrenceRemarks,
   p.team                                      AS identifiedBy,
   o.gevalideerd                               AS identificationVerificationStatus
 FROM observations as o 
