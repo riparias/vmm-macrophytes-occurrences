@@ -4,7 +4,14 @@ Created by Damiano Oldoni (INBO)
 
 SELECT
   m.'Deelmonster ID MOW'                     AS eventID,
-  m.'Deelmonster ID MOW' || ':' || REPLACE(m.par, ' ', '_')   AS measurementID,
+  CASE
+    WHEN m.par = 'T' THEN m.'Deelmonster ID MOW' || ':' || 'temperature'
+    WHEN m.par = 'pH' THEN m.'Deelmonster ID MOW' || ':' || 'pH'
+    WHEN m.par = 'O2' THEN m.'Deelmonster ID MOW' || ':' || 'dissolved_oxygen'
+    WHEN m.par = 'O2 verz' THEN m.'Deelmonster ID MOW' || ':' || 'oxygen_saturation'
+    WHEN m.par = 'EC 20' THEN m.'Deelmonster ID MOW' || ':' || 'electrical_conductivity'
+    WHEN m.par = 'Secchi' THEN m.'Deelmonster ID MOW' || ':' || 'Secchi_depth'
+  END                                   AS measurementID,
   CASE
     WHEN m.par = 'T' THEN 'temperature'
     WHEN m.par = 'pH' THEN 'pH'
