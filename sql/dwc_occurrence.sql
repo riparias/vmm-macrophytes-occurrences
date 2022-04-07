@@ -10,6 +10,19 @@ SELECT
     WHEN o.'Macrofyt Auteur' IS NULL THEN RTRIM(REPLACE(o.'Macrofyt Naam', 'groep', ''))
   END                                         AS scientificName,
   'Plantae'                                   AS kingdom,
+  CASE
+    WHEN o.'Macrofyt Rang' = 'Species' THEN 'species'
+    WHEN o.'Macrofyt Rang' = 'Genus' THEN 'genus'
+    WHEN o.'Macrofyt Rang' = 'Form' THEN 'form'
+    WHEN o.'Macrofyt Rang' = 'Variety' THEN 'variety'
+    WHEN o.'Macrofyt Rang' = 'Species group' THEN 'species'
+    WHEN o.'Macrofyt Rang' = 'Species hybrid' THEN 'species'
+    WHEN o.'Macrofyt Rang' = 'Section' THEN NULL
+    WHEN o.'Macrofyt Rang' = 'Subgenus' THEN NULL
+    WHEN o.'Macrofyt Rang' = 'Subspecies' THEN 'subspecies'
+    WHEN o.'Macrofyt Rang' = 'Unknown' THEN NULL
+    ELSE NULL
+  END                                         AS taxonRank,
   o.'Macrofyt Rang'                           AS verbatimTaxonRank,
   o.'Macrofyt Voorkeursnaam'                  AS vernacularName,
   CASE 
