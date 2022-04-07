@@ -54,7 +54,12 @@ FROM
 
 UNION
 
-/* to attach VEGETATIONS info at different depths as separate sub-events*/
+/* 
+to attach VEGETATIONS info at different 'interval' values as separate 
+child events.
+The few deelmonster IDs not present in features are excluded to avoid 
+pointing to not existing parentEventID.
+*/
 
 SELECT
   'Event'                               AS type,
@@ -117,4 +122,6 @@ SELECT
   NULL                                              AS verbatimCoordinateSystemProperty,
   NULL                                              AS dynamicProperties 
   FROM vegetations as v
+  INNER JOIN features as f
+  ON f.deelmonster_id = v.deelmonster_id
 )
