@@ -79,7 +79,7 @@ SELECT
   v.deelmonster_id || ':' || v.interval             AS eventID,
   v.deelmonster_id                                  AS parentEventID,
   NULL                                              AS eventDate,
-  NULL                                              AS eventRemarks,
+  v.opmerking                                       AS eventRemarks,
 -- LOCATION
   NULL                                              AS locationID,
   NULL                                              AS continent,
