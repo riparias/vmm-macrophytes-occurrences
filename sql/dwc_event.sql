@@ -12,7 +12,7 @@ SELECT
   NULL                                  AS datasetID,
   'VMM'                                 AS institutionCode,
   NULL                                AS collectionCode,
-  'Inland water macrophytes occurrences in Flanders' AS datasetName,
+  'The inland water macrophyte occurrences in Flanders, Belgium' AS datasetName,
   NULL                                  AS ownerInstitutionCode,
   *
 FROM (
