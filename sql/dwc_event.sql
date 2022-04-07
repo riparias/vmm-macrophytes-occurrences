@@ -42,6 +42,7 @@ SELECT
   p.X                                   AS verbatimLongitude,
   'EPSG:31370'                          AS verbatimCoordinateSystemProperty,
   '{{"watercourse":"' || p.waterloop ||
+    '", "basin":"' || p.bekken || 
     '", "waterbodySurface":"' || p.owl || 
     '", "waterbodyCategory":"' || p.waterlichaamcategorietype || 
     '", "map":"' || p.kaart ||
