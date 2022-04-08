@@ -30,7 +30,17 @@ SELECT
   p.waterlichaam                        AS waterBody,
   'Belgium'                             AS country,
   'BE'                                  AS countryCode,
-  p.provincie                           AS stateProvince,
+  CASE
+    WHEN p.provincie = 'Limburg' THEN 'Limburg'
+    WHEN p.provincie = 'West-Vlaanderen' THEN 'West Flanders'
+    WHEN p.provincie = 'Oost-Vlaanderen' THEN 'East Flanders'
+    WHEN p.provincie = 'Antwerpen' THEN 'Antwerp'
+    WHEN p.provincie = 'Antwerpen' THEN 'Antwerp'
+    WHEN p.provincie = 'Vlaams-Brabant' THEN 'Flemish Brabant'
+    WHEN p.provincie = 'Brussel (pro forma)' THEN 'Brussels-Capital Region'
+    WHEN p.provincie = 'Luik' THEN 'Liège'
+    WHEN p.provincie = 'Henegouwen' THEN 'Hainaut'
+  END                                   AS stateProvince,
   p.gemeente                            AS municipality,
   0                                     AS minimumDepthInMeters,
   CAST(f.'Diepte Maximum (cm)' AS REAL) / 100         AS maximumDepthInMeters,
