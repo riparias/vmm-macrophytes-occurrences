@@ -8,6 +8,17 @@ This repository contains the functionality to standardize the macrophytes data o
 
 [source data](data/raw) → Darwin Core [mapping script](src/dwc_mapping.Rmd) → generated [Darwin Core files](data/processed)
 
+## Mapping
+
+The data are mapped as follows:
+
+- Events are generated based on `deelmonster_id` from `kenmerken` sheet.
+- Child events are generated for encoding all the combinations `deelmonster_id` - `interval` in `vegetatie-ontwikkeling` sheet.
+- Occurrences are created based on `opnames_lijst` sheet and linked via `deelmonster_id` to events.
+- MeasurementsOrFacts are created based on several fields from `kenmerken`, `veldmetingen (FC)`, `EKC MAF` and `vegetatie-ontwikkeling` sheets.
+
+The detailed mapping of all the fields in the export, can be found in [mapping_details]().
+
 ## Published dataset
 
 * [Dataset on the IPT](#) - TBD
