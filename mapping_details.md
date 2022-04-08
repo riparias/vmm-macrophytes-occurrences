@@ -22,7 +22,7 @@ opnames_lijst | `waterlichaamcategorietype` | none | none | Same info present in
 vegetatie-ontwikkeling | `deelmonster_id` | `events.csv` | part of `eventID`; `parentEventID` | Multiple `interval` values (see below) for each `eventID`: children events are made combining `deelmonster_id` with `interval` . Examples `eventID`: `21327837:0-10m`, `21327837:10-20m`. Example `parentEventID`: `21327837`.
 vegetatie-ontwikkeling | `meetplaats` | none | none |  Same place as parent event. 
 vegetatie-ontwikkeling | `monsternamedatum` | none | none | Same date as parent event.
-vegetatie-ontwikkeling | `interval` | `events.csv` | part of `eventID` | See examples above. 
+vegetatie-ontwikkeling | `interval` | `events.csv` | part of `eventID` and part of `dynamicProperties` | For `eventID`, see examples above. Example `dynamicProperties`: `{"watercourse":"WOLUWE", "basin":"Dijle- en Zennebekken", "waterbodySurface":"VL11_91", "waterbodyCategory":"Bg", "map":"31/3-4", "interval":"40-50m"}`. 
 vegetatie-ontwikkeling | `Submers Code` | `mof.csv`  | `measurementValue` | Examples: `1`, `2`. To review: see #13.
 vegetatie-ontwikkeling | `"Submers Code"` (field name) | `mof.csv`  | `measurementType` and `measurementID` | Translated as `submerged code`. To review: see #13.
 vegetatie-ontwikkeling | `submers` | `mof.csv`  | `measurementValue` | Example: `"no submerged vegetation"`. To review: see #13 and #7.
