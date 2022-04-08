@@ -12,7 +12,7 @@ opnames_lijst | `Macrofyt Naam` | `occurrences.csv` | part of `scientificName` a
 opnames_lijst | `Macrofyt Rang` | `occurrences.csv` | `taxonRank` | Final mapping depending on #6
 opnames_lijst | `Macrofyt Auteur` | `occurrences.csv` | part of `scientificName` | used with `Macrofyt Naam` to form `scientificName` (see examples above).
 opnames_lijst | `Macrofyt Voorkeursnaam` | `occurrences.csv` | `vernacularName` | 
-opnames_lijst | `groeivorm` | `occurrences.csv` | `occurrenceRemarks` | See DwC term [definition](https://dwc.tdwg.org/terms/#dwc:occurrenceRemarks). Examples: `Oever/moeras`, `Vallisneriden`.
+opnames_lijst | `groeivorm` | `occurrences.csv` | `occurrenceRemarks` | See DwC term [definition](https://dwc.tdwg.org/terms/#dwc:occurrenceRemarks). Examples: `Oever/moeras`, `Vallisneriden`. To be translated to English, see #21.
 opnames_lijst | `Tansley Code` | `occurrences.csv` | `organismQuantityValue` | See #11.
 opnames_lijst | `"Tansley Code"` (field name) | `occurrences.csv` | `organismQuantityType` | string `"Tansley vegetation scale"`. See #11.
 opnames_lijst | `Tansley Weging` | none | none | See #12.
