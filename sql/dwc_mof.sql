@@ -26,12 +26,15 @@ SELECT
     WHEN m.teken = '>' THEN '>' || m.Resultaat
   END                                   AS measurementValue,
   
-  m.eenh                                AS measurementUnit,
+  CASE 
+    WHEN m.eenh = '-' THEN NULL
+    ELSE m.eenh
+  END                                   AS measurementUnit,
   m. monsternamedatum                   AS measurementDeterminedDate,
   
   CASE
-    WHEN m.'Secchischijf op Bodem' = 'Ja' THEN 'Secchi disk at the bottom'
-    WHEN m.'Secchischijf op Bodem' = 'Nee' THEN 'Secchi disk not at the bottom'
+    WHEN m.par = 'Secchi' AND m.'Secchischijf op Bodem' = 'Ja' THEN 'Secchi disk at the bottom'
+    WHEN m.par = 'Secchi' AND m.'Secchischijf op Bodem' = 'Nee' THEN 'Secchi disk not at the bottom'
   END                                   AS measurementRemarks
   
 FROM
