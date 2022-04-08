@@ -17,7 +17,7 @@ The data are mapped as follows:
 - Occurrences are created based on `opnames_lijst` sheet and linked via `deelmonster_id` to events.
 - MeasurementsOrFacts are created based on several fields from `kenmerken`, `veldmetingen (FC)`, `EKC MAF` and `vegetatie-ontwikkeling` sheets.
 
-The detailed mapping of all the fields in the export, can be found in [mapping_details]().
+The detailed mapping of all the fields in the export, can be found in [mapping_details](https://github.com/riparias/vmm-macrophytes-occurrences/blob/master/mapping_details.md).
 
 ## Published dataset
 
