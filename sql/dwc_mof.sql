@@ -283,6 +283,25 @@ FROM ecologic_coeffs as e WHERE e.'index ZONDER gep' IS NOT NULL
 
 UNION
 
+/* ECOLOGIC COEFFICIENT status */
+
+SELECT
+  e.'Deelmonster ID'                          AS eventID,
+  e.'Deelmonster ID' || ':' || 'status' AS measurementID,
+  'status'        AS measurementType,
+  CASE 
+    WHEN e.status = 'DEFAU' THEN 'default'
+    WHEN e.status = 'KUNST' THEN 'artificial'
+    WHEN e.status = 'NAT' THEN 'natural'
+  END                                         AS measurementValue,
+  NULL                                        AS measurementUnit,
+  e.monsternamedatum                          AS measurementDeterminedDate,
+  NULL                                        AS measurementRemarks
+FROM ecologic_coeffs as e WHERE e.status IS NOT NULL
+
+
+UNION
+
 /* VEGETATION DEVELOPMENT  submerged_code */
 
 SELECT
