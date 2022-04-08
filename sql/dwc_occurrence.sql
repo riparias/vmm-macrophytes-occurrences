@@ -6,8 +6,27 @@ SELECT
   o.'deelmonster_id'                          AS eventID,
   o.deelmonster_id || ':' || REPLACE(o.'Macrofyt Naam', ' ', '_') AS occurrenceID,
   CASE 
-    WHEN o.'Macrofyt Auteur' IS NOT NULL THEN RTRIM(REPLACE(o.'Macrofyt Naam', 'groep', '')) || + ' ' || + o.'Macrofyt Auteur'
-    WHEN o.'Macrofyt Auteur' IS NULL THEN RTRIM(REPLACE(o.'Macrofyt Naam', 'groep', ''))
+    WHEN o.'Macrofyt Naam' = 'Draadwier' THEN 'thread algae'
+    WHEN o.'Macrofyt Naam' = 'Draadwier (submers)' THEN 'thread algae'
+    WHEN o.'Macrofyt Naam'  = 'Salix spp. (broad leaves)' THEN 'Salix'
+    WHEN o.'Macrofyt Naam'  = 'Salix spp. (small leaves)' THEN 'Salix'
+    WHEN o.'Macrofyt Naam'  = 'Nymphaea spec. (neofyt)' THEN 'Nymphaea'
+    WHEN o.'Macrofyt Naam'  = 'Salix fragilis L. (incl. kruisingen)' 
+      THEN 'Salix ×fragilis L.'
+    WHEN o.'Macrofyt Naam'  = 'Salix cinerea L. (incl. kruisingen)' 
+      THEN 'Salix cinerea L.'
+    WHEN o.'Macrofyt Naam' = 'Taraxacum Wiggers sect. Subvulgaria' AND 
+      o.'Macrofyt Auteur' = 'Christians.' 
+      THEN 'Taraxacum F.H.Wigg.'
+    WHEN o.'Macrofyt Naam' = 'Lysichiton americanus' AND 
+      o.'Macrofyt Auteur' = ' Hultén et St John x L. camtschatcensis (L.) Schott' 
+      THEN 'Lysichiton americanus × camtschatcensis'
+    WHEN o.'Macrofyt Naam' = 'Trifolium' THEN 'Trifolium Tourn. ex L.'
+    -- remove string 'groep' from Macrofyt Naam
+    WHEN o.'Macrofyt Auteur' IS NOT NULL 
+      THEN RTRIM(REPLACE(o.'Macrofyt Naam', 'groep', '')) || + ' ' || + o.'Macrofyt Auteur'
+    WHEN o.'Macrofyt Auteur' IS NULL 
+      THEN RTRIM(REPLACE(o.'Macrofyt Naam', 'groep', ''))
   END                                         AS scientificName,
   'Plantae'                                   AS kingdom,
   CASE
@@ -17,13 +36,34 @@ SELECT
     WHEN o.'Macrofyt Rang' = 'Variety' THEN 'variety'
     WHEN o.'Macrofyt Rang' = 'Species group' THEN 'species'
     WHEN o.'Macrofyt Rang' = 'Species hybrid' THEN 'species'
-    WHEN o.'Macrofyt Rang' = 'Section' THEN NULL
-    WHEN o.'Macrofyt Rang' = 'Subgenus' THEN NULL
+    -- for Taraxacum Wiggers sect. Subvulgaria Christians
+    WHEN o.'Macrofyt Rang' = 'Section' AND 
+      o.'Macrofyt Naam' = 'Taraxacum Wiggers sect. Subvulgaria' AND 
+      o.'Macrofyt Auteur' = 'Christians.' THEN 'genus'
+    -- all any other possible taxa with rank section if present
+    WHEN o.'Macrofyt Rang' = 'Section' AND 
+      o.'Macrofyt Naam' != 'Taraxacum Wiggers sect. Subvulgaria' THEN 'section'
+    WHEN o.'Macrofyt Rang' = 'Subgenus' THEN 'subgenus'
     WHEN o.'Macrofyt Rang' = 'Subspecies' THEN 'subspecies'
-    WHEN o.'Macrofyt Rang' = 'Unknown' THEN NULL
-    ELSE NULL
+    -- for Nymphaea spec. (neofyt)
+    WHEN o.'Macrofyt Rang' = 'Unknown' AND
+      o.'Macrofyt Naam' = 'Nymphaea spec. (neofyt)' THEN 'genus'
+    -- other taxa with rank Unknown if present
+    WHEN o.'Macrofyt Rang' = 'Unknown' AND
+      o.'Macrofyt Naam' != 'Nymphaea spec. (neofyt)' THEN 'unranked'
+    -- draadwier or draadwier (submers)
+    WHEN o.'Macrofyt Rang' = 'Functional group' AND
+      o.'Macrofyt Naam' LIKE 'Draadwier%' THEN 'functional group'
+    -- Salix spp. (broad leaves) or Salix spp. (small leaves)
+    WHEN o.'Macrofyt Rang' = 'Functional group' AND
+      o.'Macrofyt Naam' NOT LIKE 'Draadwier%' AND
+      o.'Macrofyt Naam' LIKE 'Salix spp.%' THEN 'genus'
+    -- 'Salix fragilis L. (incl. kruisingen)' or 'Salix cinerea L. (incl. kruisingen)'
+    WHEN o.'Macrofyt Rang' = 'Functional group' AND
+      o.'Macrofyt Naam' NOT LIKE 'Draadwier%' AND 
+      o.'Macrofyt Naam' NOT LIKE 'Salix spp.%' THEN 'species'
+    WHEN o.'Macrofyt Rang' = 'Species aggregate' THEN 'speciesAggregate'
   END                                         AS taxonRank,
-  o.'Macrofyt Rang'                           AS verbatimTaxonRank,
   o.'Macrofyt Voorkeursnaam'                  AS vernacularName,
   CASE 
     WHEN o.'Tansley Code' = 'z' THEN 's'
@@ -37,4 +77,3 @@ SELECT
 FROM observations as o 
  LEFT JOIN positions AS p
     ON p.meetplaats = o.meetplaats
-WHERE o.'Macrofyt Rang' != 'Functional group' AND o.'Macrofyt Rang' != 'Species aggregate'
