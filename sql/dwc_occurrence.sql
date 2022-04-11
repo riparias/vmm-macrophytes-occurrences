@@ -12,12 +12,12 @@ SELECT
     WHEN o.'Macrofyt Naam'  = 'Salix spp. (small leaves)' THEN 'Salix'
     WHEN o.'Macrofyt Naam'  = 'Nymphaea spec. (neofyt)' THEN 'Nymphaea'
     WHEN o.'Macrofyt Naam'  = 'Salix fragilis L. (incl. kruisingen)' 
-      THEN 'Salix ×fragilis L.'
+      THEN 'Salix fragilis L.'
     WHEN o.'Macrofyt Naam'  = 'Salix cinerea L. (incl. kruisingen)' 
       THEN 'Salix cinerea L.'
     WHEN o.'Macrofyt Naam' = 'Taraxacum Wiggers sect. Subvulgaria' AND 
       o.'Macrofyt Auteur' = 'Christians.' 
-      THEN 'Taraxacum F.H.Wigg.'
+      THEN 'Taraxacum Wiggers sect. Subvulgaria Christians.'
     WHEN o.'Macrofyt Naam' = 'Lysichiton americanus' AND 
       o.'Macrofyt Auteur' = ' Hultén et St John x L. camtschatcensis (L.) Schott' 
       THEN 'Lysichiton americanus × camtschatcensis'
