@@ -24,7 +24,7 @@ Install required libraries (if not yet installed):
 
 ```{r install_pkgs}
 installed <- rownames(installed.packages())
-required <- c("dplyr", "here", "glue", "readxl", "DBI", "RSQLite", "sf")
+required <- c("dplyr", "readr", "here", "glue", "readxl", "DBI", "RSQLite", "sf")
 if (!all(required %in% installed)) {
   install.packages(required[!required %in% installed])
 }
@@ -33,8 +33,9 @@ if (!all(required %in% installed)) {
 Load libraries:
 
 ```{r load_pkgs, message = FALSE}
-library(dplyr)       # To use pipes and perform basic data science
+library(dplyr)          # To use pipes and perform basic data science
 library(here)           # To find files
+library(readr)          # To write text files
 library(glue)           # To insert variables in strings
 library(readxl)         # To write files
 library(DBI)            # To create and query databases
