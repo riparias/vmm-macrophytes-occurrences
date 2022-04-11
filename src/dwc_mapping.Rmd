@@ -12,7 +12,7 @@ output:
     toc_float: yes
 ---
 
-This document describes how (and contains the code to) transform the mcrophytes data of the [Flanders Environment Agency](https://en.vmm.be/) (VMM) to a [Darwin Core Archive](https://ipt.gbif.org/manual/en/ipt/2.5/dwca-guide) that can be uploaded to an [IPT](https://ipt.gbif.org/manual/en/ipt/2.5/).
+This document describes how (and contains the code to) transform the macrophytes data of the [Flanders Environment Agency](https://en.vmm.be/) (VMM) to a [Darwin Core Archive](https://ipt.gbif.org/manual/en/ipt/2.5/dwca-guide) that can be uploaded to an [IPT](https://ipt.gbif.org/manual/en/ipt/2.5/).
 
 # Setup 
 
