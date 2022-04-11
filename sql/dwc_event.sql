@@ -14,6 +14,7 @@ SELECT
   NULL                                AS collectionCode,
   'The inland water macrophyte occurrences in Flanders, Belgium' AS datasetName,
   NULL                                  AS ownerInstitutionCode,
+  'human observation'                   AS basisOfRecord,
   *
 FROM (
 
@@ -83,6 +84,7 @@ SELECT
   NULL                                  AS collectionCode,
   'The inland water macrophyte occurrences in Flanders, Belgium' AS datasetName,
   'VMM'                                 AS ownerInstitutionCode,
+  'human observation'                   AS basisOfRecord,
   *
 FROM (
 
