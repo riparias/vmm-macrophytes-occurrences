@@ -31,18 +31,18 @@ vegetatie-ontwikkeling | `Submers Weging` | none | none | It can be added. See #
 vegetatie-ontwikkeling | `gevalideerd` | none | none | not possible to add validation for measurements. See #13.
 vegetatie-ontwikkeling | `opmerking` | `events.csv` | `eventRemarks` | 
 vegetatie-ontwikkeling | `waterlichaamcategorietype` | none | none | Same as parent event.
-meetplaatsen | `meetplaats` | `events.csv` | `locationID` |
-meetplaatsen | `omschrijving` | `events.csv` | | 
-meetplaatsen | `X` | `events.csv` | `verbatimLongitude` | 
-meetplaatsen | `Y` | `events.csv` | `verbatimLatitude` | 
+meetplaatsen | `meetplaats` | `events.csv` | `locationID` | Examples: `TR100400.1`, `C05.143`. 
+meetplaatsen | `omschrijving` | `events.csv` | `locationRemarks` | Examples: `"Hamont, Kluizerdijk, voor Achelse Kluis, 20m opw brug"`, `"centroïde MAAS II"`.
+meetplaatsen | `X` | `events.csv` | `verbatimLongitude` | Example: `228043`.
+meetplaatsen | `Y` | `events.csv` | `verbatimLatitude` | Example: `221224`.
 meetplaatsen | `gemeente` | `events.csv`| `municipality`| 
 meetplaatsen | `provincie` | `events.csv` | `stateProvince` | 
-meetplaatsen | `waterloop` | `events.csv` | part of `dynamicProperties` | See #15. Example: `waterloop` = `waterBody`. Example: `{"watercourse":"WOLUWE", "basin":"Dijle- en Zennebekken", "waterbodySurface":"VL11_91", "waterbodyCategory":"Bg", "map":"31/3-4"}`.
+meetplaatsen | `waterloop` | `events.csv` | part of `dynamicProperties` | See #15. Example: `waterloop` = `waterBody`. Example: `{"watercourse":"WOLUWE", "basin":"Dijle- en Zennebekken", "waterbodySurfaceCode":"VL11_91", "waterbodyCategory":"Bg", "map":"31/3-4"}`.
 meetplaatsen | `bekken` | `events.csv` | part of `dynamicProperties` | Translated as `basin`. See above and #15.
 meetplaatsen | `owl` | `events.csv`| part of `dynamicProperties` | See above and #15.
-meetplaatsen | `waterlichaam` | `events.csv` | `waterBody` | 
+meetplaatsen | `waterlichaam` | `events.csv` | `waterBody` | Example: `WARMBEEK`, `MAAS I+II+III`.
 meetplaatsen | `waterlichaamcategorietype` | `events.csv` | part of `dynamicProperties` |  See above and #15.
-meetplaatsen | `kaart` | `events.csv` | part of `dynamicProperties` | See above and #15. 
+meetplaatsen | `kaart` | `events.csv` | Not mapped: internal use only. | See above and #15.
 meetplaatsen | `team` | `occurrences.csv` | `identifiedBy` | See #16.
 kenmerken | `deelmonster_id` | `events.csv` | `eventID` | Used as unique identifier. Also used as `parentEventID` for child events from `vegetatie-ontwikkeling` (see above). Part of all `measurementID` values, examples: `21327837:Secchi_depth`, `21327837:current`, `21327837:dissolved_oxygen`.
 kenmerken | `meetplaats` | none | none | `meetplaats` field used in the JOIN with `meetplaatsen` sheet. 
