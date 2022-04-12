@@ -52,12 +52,12 @@ SELECT
   'EPSG:4326'                           AS geodeticDatum,
   p.Y                                   AS verbatimLatitude,
   p.X                                   AS verbatimLongitude,
-  'EPSG:31370'                          AS verbatimCoordinateSystemProperty,
+  'EPSG:31370'                          AS verbatimSRS,
+  'Belgian Lambert 72'                  AS verbatimCoordinateSystemProperty,
   '{{"watercourse":"' || p.waterloop ||
     '", "basin":"' || p.bekken || 
-    '", "waterbodySurface":"' || p.owl || 
-    '", "waterbodyCategory":"' || p.waterlichaamcategorietype || 
-    '", "map":"' || p.kaart ||
+    '", "waterbodySurfaceCode":"' || p.owl || 
+    '", "waterbodyCategory":"' || p.waterlichaamcategorietype ||
     '"}}' AS dynamicProperties
 FROM
   features AS f
@@ -122,12 +122,12 @@ SELECT
   'EPSG:4326'                           AS geodeticDatum,
   p.Y                                   AS verbatimLatitude,
   p.X                                   AS verbatimLongitude,
-  'EPSG:31370'                          AS verbatimCoordinateSystemProperty,
+  'EPSG:31370'                          AS verbatimSRS,
+  'Belgian Lambert 72'                  AS verbatimCoordinateSystem,
   '{{"watercourse":"' || p.waterloop ||
     '", "basin":"' || p.bekken || 
-    '", "waterbodySurface":"' || p.owl || 
-    '", "waterbodyCategory":"' || p.waterlichaamcategorietype || 
-    '", "map":"' || p.kaart ||
+    '", "waterbodySurfaceCode":"' || p.owl || 
+    '", "waterbodyCategory":"' || p.waterlichaamcategorietype ||
     '", "interval":"' || v.interval ||
     '"}}' AS dynamicProperties
   FROM vegetations as v
