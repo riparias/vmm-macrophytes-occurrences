@@ -22,11 +22,11 @@ SELECT
       o.'Macrofyt Auteur' = ' Hultén et St John x L. camtschatcensis (L.) Schott' 
       THEN 'Lysichiton americanus × camtschatcensis'
     WHEN o.'Macrofyt Naam' = 'Trifolium' THEN 'Trifolium Tourn. ex L.'
-    -- remove string 'groep' from Macrofyt Naam
+    -- replace 'groep' with 'group' in Macrofyt Naam
     WHEN o.'Macrofyt Auteur' IS NOT NULL 
-      THEN RTRIM(REPLACE(o.'Macrofyt Naam', 'groep', '')) || + ' ' || + o.'Macrofyt Auteur'
+      THEN RTRIM(REPLACE(o.'Macrofyt Naam', 'groep', 'group')) || + ' ' || + o.'Macrofyt Auteur'
     WHEN o.'Macrofyt Auteur' IS NULL 
-      THEN RTRIM(REPLACE(o.'Macrofyt Naam', 'groep', ''))
+      THEN RTRIM(REPLACE(o.'Macrofyt Naam', 'groep', 'group'))
   END                                         AS scientificName,
   'Plantae'                                   AS kingdom,
   CASE
@@ -34,7 +34,7 @@ SELECT
     WHEN o.'Macrofyt Rang' = 'Genus' THEN 'genus'
     WHEN o.'Macrofyt Rang' = 'Form' THEN 'form'
     WHEN o.'Macrofyt Rang' = 'Variety' THEN 'variety'
-    WHEN o.'Macrofyt Rang' = 'Species group' THEN 'species'
+    WHEN o.'Macrofyt Rang' = 'Species group' THEN 'agg.'
     WHEN o.'Macrofyt Rang' = 'Species hybrid' THEN 'species'
     -- for Taraxacum Wiggers sect. Subvulgaria Christians
     WHEN o.'Macrofyt Rang' = 'Section' AND 
