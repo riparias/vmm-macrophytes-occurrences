@@ -4,7 +4,7 @@ Created by Damiano Oldoni (INBO)
 
 SELECT
   o.'deelmonster_id'                          AS eventID,
-  o.deelmonster_id || ':' || REPLACE(o.'Macrofyt Naam', ' ', '_') AS occurrenceID,
+  o.deelmonster_id || ':' || o.species_name_hash AS occurrenceID,
   CASE 
     WHEN o.'Macrofyt Naam' = 'Draadwier' THEN 'thread algae'
     WHEN o.'Macrofyt Naam' = 'Draadwier (submers)' THEN 'thread algae'

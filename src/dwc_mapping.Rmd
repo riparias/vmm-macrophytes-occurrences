@@ -24,7 +24,8 @@ Install required libraries (if not yet installed):
 
 ```{r install_pkgs}
 installed <- rownames(installed.packages())
-required <- c("dplyr", "readr", "here", "glue", "readxl", "DBI", "RSQLite", "sf")
+required <- c("dplyr", "here", "readr", "glue", 
+              "readxl", "DBI", "RSQLite", "sf", "digest")
 if (!all(required %in% installed)) {
   install.packages(required[!required %in% installed])
 }
@@ -41,6 +42,7 @@ library(readxl)         # To write files
 library(DBI)            # To create and query databases
 library(RSQLite)        # To work with SQLite databases in R
 library(sf)             # To work with spatial data
+library(digest)         # To generate hashes
 ```
 
 # Read source data
@@ -50,7 +52,6 @@ The source data were provided manually and stored in `data/raw`. If this workflo
 Read source files:
 
 ```{r read_raw_data}
-# All columns are read as characters for easier import into SQLite: https://stackoverflow.com/a/13462536/2463806
 raw_data_filename <- "macrofyten 2022-03-10T13_18_15.337Z.xlsx"
 observations <- readxl::read_xlsx(
   here::here("data", "raw", raw_data_filename),
@@ -95,7 +96,21 @@ positions <- positions %>%
 head(positions)
 ```
 
-## Create database
+## Generate hashes for species names
+
+We generate a hash based on the species name as saved in column `Macrofyt Naam`. This is needed to create a unique `occurrenceID` of the form `eventID:hash` where `eventID` is the unique identifier of the event as defined in column `deelmonster_id`. As long as the species name doesn't change, the hash and so the `occurrenceID` will be stable:
+
+```{r generate_hashes}
+# Vectorize the digest function (The digest() function isn't vectorized. So if you pass in a vector, you get one value for the whole vector rather than a digest for each element of the vector):
+vdigest <- Vectorize(digest)
+# Generate hashes:
+observations <- observations %>% 
+  mutate(species_name_hash = vdigest (.data$`Macrofyt Naam`,
+                                      algo="md5"))
+```
+
+
+# Create database
 
 Create a SQLite database with the source data, so it can be queried with SQL in the next steps:
 
@@ -111,7 +126,7 @@ DBI::dbWriteTable(macrophytes_db, "ecologic_coeffs", ecologic_coeffs)
 ```
 
 
-## Darwin Core mapping
+# Darwin Core mapping
 
 Create [Event](https://rs.gbif.org/core/dwc_event_2022-02-02.xml) core:
 
@@ -134,7 +149,7 @@ dwc_mof_sql <- glue::glue_sql(readr::read_file(here::here("sql", "dwc_mof.sql"))
 dwc_mof <- DBI::dbGetQuery(macrophytes_db, dwc_mof_sql)
 ```
 
-## Save data to CSV
+# Save data to CSV
 
 ```{r save_csv}
 write_csv(dwc_event, here::here("data", "processed", "event.csv"), na = "")
