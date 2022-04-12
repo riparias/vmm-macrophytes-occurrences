@@ -4,7 +4,7 @@ This document contains the detailed mapping of each field from the raw data expo
 
 sheet | field | DwC file | DwC field | comments
 --- | --- | --- | --- | ---
-opnames_lijst | `deelmonster_id` | `occurrences.csv` | `eventID`; part of the `occurrenceID` | multiple unique plants per `deelmonster_id`. Example for `eventID`: `21341683`. Examples for `occurrenceID`: `21341683:Rorippa_amphibia`, `21341683:Sparganium_emersum`.
+opnames_lijst | `deelmonster_id` | `occurrences.csv` | `eventID`; part of the `occurrenceID` | multiple unique plants per `deelmonster_id`. Example for `eventID`: `21341683`. Example for `occurrenceID`: `"21341683:808203f629d0cbc61dca8cf2a0de0064"`.
 opnames_lijst | `meetplaats` | none | none | position recorded at event level
 opnames_lijst | `Jaar` | none | none |  date recorded at event level
 opnames_lijst | `monsternamedatum` | none | none | date recorded at event level
