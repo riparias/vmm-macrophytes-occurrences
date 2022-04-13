@@ -4,7 +4,19 @@ Created by Damiano Oldoni (INBO)
 
 SELECT
   o.'deelmonster_id'                    AS eventID,
+-- OCCURRENCE
   o.deelmonster_id || ':' || o.species_name_hash AS occurrenceID,
+  CASE 
+    WHEN o.'Tansley Code' = 'z' THEN 's'
+    WHEN o.'Tansley Code' = 'cd' THEN 'c'
+    ELSE o.'Tansley Code'
+  END                                         AS organismQuantity,
+  'Tansley vegetation scale'                  AS organismQuantityType,
+  o.groeivorm                                 AS occurrenceRemarks,
+-- IDENTIFICATION
+  p.team                                      AS identifiedBy,
+  o.gevalideerd                               AS identificationVerificationStatus,
+-- TAXON
   CASE 
     WHEN o.'Macrofyt Naam' = 'Draadwier' THEN 'thread algae'
     WHEN o.'Macrofyt Naam' = 'Draadwier (submers)' THEN 'thread algae'
@@ -42,16 +54,7 @@ SELECT
     WHEN o.'Macrofyt Rang' = 'Functional group' THEN 'functional group'
     WHEN o.'Macrofyt Rang' = 'Species aggregate' THEN 'speciesAggregate'
   END                                         AS taxonRank,
-  o.'Macrofyt Voorkeursnaam'                  AS vernacularName,
-  CASE 
-    WHEN o.'Tansley Code' = 'z' THEN 's'
-    WHEN o.'Tansley Code' = 'cd' THEN 'c'
-    ELSE o.'Tansley Code'
-  END                                         AS organismQuantity,
-  'Tansley vegetation scale'                  AS organismQuantityType,
-  o.groeivorm                                 AS occurrenceRemarks,
-  p.team                                      AS identifiedBy,
-  o.gevalideerd                               AS identificationVerificationStatus
+  o.'Macrofyt Voorkeursnaam'                  AS vernacularName
 FROM observations as o 
  LEFT JOIN positions AS p
     ON p.meetplaats = o.meetplaats
