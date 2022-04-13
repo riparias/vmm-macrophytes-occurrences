@@ -63,7 +63,6 @@ FROM
   features AS f
   LEFT JOIN positions AS p
     ON p.meetplaats = f.meetplaats
-)
 
 UNION
 
@@ -73,20 +72,6 @@ child events.
 The few deelmonster IDs not present in features are excluded to avoid 
 pointing to not existing parentEventID.
 */
-
-SELECT
-  'Event'                               AS type,
-  'https://creativecommons.org/licenses/by/4.0/' AS license,
-  'VMM'                                 AS rightsHolder,
-  'http://www.inbo.be/en/norms-for-data-use' AS accessRights,
-  NULL                                  AS datasetID,
-  'VMM'                                 AS institutionCode,
-  NULL                                  AS collectionCode,
-  'The inland water macrophyte occurrences in Flanders, Belgium' AS datasetName,
-  'VMM'                                 AS ownerInstitutionCode,
-  'human observation'                   AS basisOfRecord,
-  *
-FROM (
 
 SELECT
 -- EVENT
