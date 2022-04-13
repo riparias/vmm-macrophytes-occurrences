@@ -10,21 +10,22 @@ SELECT
   'http://www.inbo.be/en/norms-for-data-use' AS accessRights,
   NULL                                  AS datasetID,
   'VMM'                                 AS institutionCode,
-  NULL                                AS collectionCode,
-  'The inland water macrophyte occurrences in Flanders, Belgium' AS datasetName,
-  NULL                                  AS ownerInstitutionCode,
-  'human observation'                   AS basisOfRecord,
+  'Inland water macrophyte occurrences in Flanders, Belgium' AS datasetName,
+  'HumanObservation'                    AS basisOfRecord,
+  '{{"watercourse":"' || p.waterloop ||
+    '", "basin":"' || p.bekken || 
+    '", "waterbodySurfaceCode":"' || p.owl || 
+    '", "waterbodyCategory":"' || p.waterlichaamcategorietype ||
+    '"}}'                               AS dynamicProperties,
 -- EVENT
   e.eventID                             AS eventID,
   e.parentEventID                       AS parentEventID,
   date(e.monsternamedatum)              AS eventDate,
-  e.Jaar                                AS year,
   e.eventRemarks                        AS eventRemarks,
 -- LOCATION
   p.meetplaats                          AS locationID,
   'Europe'                              AS continent,
   p.waterlichaam                        AS waterBody,
-  'Belgium'                             AS country,
   'BE'                                  AS countryCode,
   CASE
     WHEN p.provincie = 'Antwerpen' THEN 'Antwerp'
@@ -39,20 +40,15 @@ SELECT
   p.gemeente                            AS municipality,
   0                                     AS minimumDepthInMeters,
   CAST(e.'Diepte Maximum (cm)' AS REAL) / 100 AS maximumDepthInMeters,
-  NULL                                  AS verbatimDepth,
   p.omschrijving                        AS locationRemarks,
-  p.decimalLatitude                     AS decimalLatitude,
-  p.decimalLongitude                    AS decimalLongitude,
-  'EPSG:4326'                           AS geodeticDatum,
+  printf('%.5f', ROUND(p.decimalLatitude, 5)) AS decimalLatitude,
+  printf('%.5f', ROUND(p.decimalLongitude, 5)) AS decimalLongitude,
+  'WGS84'                               AS geodeticDatum,
+  30                                    AS coordinateUncertaintyInMeters,
   p.Y                                   AS verbatimLatitude,
   p.X                                   AS verbatimLongitude,
   'EPSG:31370'                          AS verbatimSRS,
-  'Belgian Lambert 72'                  AS verbatimCoordinateSystemProperty,
-  '{{"watercourse":"' || p.waterloop ||
-    '", "basin":"' || p.bekken || 
-    '", "waterbodySurfaceCode":"' || p.owl || 
-    '", "waterbodyCategory":"' || p.waterlichaamcategorietype ||
-    '"}}'                               AS dynamicProperties
+  'Belgian Lambert 72'                  AS verbatimCoordinateSystem
 
 FROM (
   
