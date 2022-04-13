@@ -12,7 +12,7 @@ output:
     toc_float: yes
 ---
 
-This document describes how (and contains the code to) transform the macrophytes data of the [Flanders Environment Agency](https://en.vmm.be/) (VMM) to a [Darwin Core Archive](https://ipt.gbif.org/manual/en/ipt/2.5/dwca-guide) that can be uploaded to an [IPT](https://ipt.gbif.org/manual/en/ipt/2.5/).
+This document describes how (and contains the code to) transform the macrophytes data of the [Flanders Environment Agency (VMM)](https://en.vmm.be/) to a [Darwin Core Archive](https://ipt.gbif.org/manual/en/ipt/2.5/dwca-guide) that can be uploaded to an [IPT](https://ipt.gbif.org/manual/en/ipt/2.5/).
 
 # Setup 
 
@@ -34,48 +34,42 @@ if (!all(required %in% installed)) {
 Load libraries:
 
 ```{r load_pkgs, message = FALSE}
-library(dplyr)          # To use pipes and perform basic data science
+library(dplyr)          # To transform data
+library(readr)          # To read and write tabular text files
 library(here)           # To find files
-library(readr)          # To write text files
 library(glue)           # To insert variables in strings
-library(readxl)         # To write files
+library(readxl)         # To read Excel files
 library(DBI)            # To create and query databases
-library(RSQLite)        # To work with SQLite databases in R
+library(RSQLite)        # To work with SQLite databases
 library(sf)             # To work with spatial data
 library(digest)         # To generate hashes
 ```
 
 # Read source data
 
-The source data were provided manually and stored in `data/raw`. If this workflow can be fully automated, replace with querying from VMm endpoints.
+The source data were provided manually and stored in `data/raw`. If this workflow can be fully automated, replace with querying from VMM endpoints.
 
 Read source files:
 
 ```{r read_raw_data}
 raw_data_filename <- "macrofyten 2022-03-10T13_18_15.337Z.xlsx"
-observations <- readxl::read_xlsx(
-  here::here("data", "raw", raw_data_filename),
-  sheet = "opnames_lijst") %>% 
+observations <-
+  readxl::read_xlsx(here::here("data", "raw", raw_data_filename), sheet = "opnames_lijst") %>%
   mutate(across(everything(), as.character))
-vegetations <- readxl::read_xlsx(
-  path = here::here("data", "raw", raw_data_filename),
-  sheet = "vegetatie-ontwikkeling")  %>% 
+vegetations <-
+  readxl::read_xlsx(here::here("data", "raw", raw_data_filename), sheet = "vegetatie-ontwikkeling") %>%
   mutate(across(everything(), as.character))
-positions <- readxl::read_xlsx(
-  here::here("data", "raw", raw_data_filename),
-  sheet = "meetplaatsen")  %>% 
+positions <-
+  readxl::read_xlsx(here::here("data", "raw", raw_data_filename), sheet = "meetplaatsen") %>%
   mutate(across(everything(), as.character))
-features <- readxl::read_xlsx(
-  here::here("data", "raw", raw_data_filename),
-  sheet = "kenmerken")  %>% 
+features <-
+  readxl::read_xlsx(here::here("data", "raw", raw_data_filename), sheet = "kenmerken") %>%
   mutate(across(everything(), as.character))
-measurements <- readxl::read_xlsx(
-  here::here("data", "raw", raw_data_filename),
-  sheet = "veldmetingen (FC)")  %>% 
+measurements <-
+  readxl::read_xlsx(here::here("data", "raw", raw_data_filename), sheet = "veldmetingen (FC)") %>%
   mutate(across(everything(), as.character))
-ecologic_coeffs <- readxl::read_xlsx(
-  here::here("data", "raw", raw_data_filename),
-  sheet = "EKC MAF")  %>% 
+ecologic_coeffs <-
+  readxl::read_xlsx(here::here("data", "raw", raw_data_filename), sheet = "EKC MAF") %>%
   mutate(across(everything(), as.character))
 ```
 
@@ -84,13 +78,13 @@ ecologic_coeffs <- readxl::read_xlsx(
 We retrieved the coordinates in [WGS 84](https://epsg.io/4326) (EPSG:4326) based on the original coordinates in [Belgian Lambert 72](https://epsg.io/31370) (EPSG:31370):
 
 ```{r transform_to_wgs84}
-positions <- positions %>%
+positions <-
+  positions %>%
   st_as_sf(coords = c("X", "Y"), crs = 31370) %>%
   st_transform(crs = 4326) %>%
   st_coordinates() %>%
   as.data.frame() %>%
-  rename(decimalLongitude = X,
-         decimalLatitude = Y) %>%
+  rename(decimalLongitude = X, decimalLatitude = Y) %>%
   bind_cols(positions) %>%
   relocate(colnames(positions))
 head(positions)
@@ -101,14 +95,12 @@ head(positions)
 We generate a hash based on the species name as saved in column `Macrofyt Naam`. This is needed to create a unique `occurrenceID` of the form `eventID:hash` where `eventID` is the unique identifier of the event as defined in column `deelmonster_id`. As long as the species name doesn't change, the hash and so the `occurrenceID` will be stable:
 
 ```{r generate_hashes}
-# Vectorize the digest function (The digest() function isn't vectorized. So if you pass in a vector, you get one value for the whole vector rather than a digest for each element of the vector):
 vdigest <- Vectorize(digest)
-# Generate hashes:
-observations <- observations %>% 
-  mutate(species_name_hash = vdigest (.data$`Macrofyt Naam`,
-                                      algo="md5"))
+# Generate hashes
+observations <-
+  observations %>% 
+  mutate(species_name_hash = vdigest (.data$`Macrofyt Naam`, algo="md5"))
 ```
-
 
 # Create database
 
@@ -124,7 +116,6 @@ DBI::dbWriteTable(macrophytes_db, "features", features)
 DBI::dbWriteTable(macrophytes_db, "measurements", measurements)
 DBI::dbWriteTable(macrophytes_db, "ecologic_coeffs", ecologic_coeffs)
 ```
-
 
 # Darwin Core mapping
 
