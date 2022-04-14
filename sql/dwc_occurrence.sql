@@ -15,7 +15,10 @@ SELECT
   o.groeivorm                                 AS occurrenceRemarks,
 -- IDENTIFICATION
   l.team                                      AS identifiedBy,
-  o.gevalideerd                               AS identificationVerificationStatus,
+  CASE
+    WHEN o.gevalideerd = 1 THEN 'verified'
+    ELSE NULL
+  END                                         AS identificationVerificationStatus,
 -- TAXON
   CASE 
     WHEN o.'Macrofyt Naam' = 'Draadwier' THEN 'thread algae'
