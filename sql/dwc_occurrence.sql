@@ -6,6 +6,7 @@ SELECT
   o.'deelmonster_id'                    AS eventID,
 -- OCCURRENCE
   o.deelmonster_id || ':' || o.species_name_hash AS occurrenceID,
+  l.team                                      AS recordedBy,
   CASE 
     WHEN o.'Tansley Code' = 'z' THEN 's'
     WHEN o.'Tansley Code' = 'cd' THEN 'c'
