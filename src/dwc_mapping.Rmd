@@ -59,7 +59,7 @@ observations <-
 vegetations <-
   readxl::read_xlsx(here::here("data", "raw", raw_data_filename), sheet = "vegetatie-ontwikkeling") %>%
   mutate(across(everything(), as.character))
-positions <-
+locations <-
   readxl::read_xlsx(here::here("data", "raw", raw_data_filename), sheet = "meetplaatsen") %>%
   mutate(across(everything(), as.character))
 features <-
@@ -78,16 +78,16 @@ ecologic_coeffs <-
 We retrieved the coordinates in [WGS 84](https://epsg.io/4326) (EPSG:4326) based on the original coordinates in [Belgian Lambert 72](https://epsg.io/31370) (EPSG:31370):
 
 ```{r transform_to_wgs84}
-positions <-
-  positions %>%
+locations <-
+  locations %>%
   st_as_sf(coords = c("X", "Y"), crs = 31370) %>%
   st_transform(crs = 4326) %>%
   st_coordinates() %>%
   as.data.frame() %>%
   rename(decimalLongitude = X, decimalLatitude = Y) %>%
-  bind_cols(positions) %>%
-  relocate(colnames(positions))
-head(positions)
+  bind_cols(locations) %>%
+  relocate(colnames(locations))
+head(locations)
 ```
 
 ## Generate hashes for species names
@@ -111,7 +111,7 @@ macrophytes_db <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
 # Import data
 DBI::dbWriteTable(macrophytes_db, "observations", observations)
 DBI::dbWriteTable(macrophytes_db, "vegetations", vegetations)
-DBI::dbWriteTable(macrophytes_db, "positions", positions)
+DBI::dbWriteTable(macrophytes_db, "locations", locations)
 DBI::dbWriteTable(macrophytes_db, "features", features)
 DBI::dbWriteTable(macrophytes_db, "measurements", measurements)
 DBI::dbWriteTable(macrophytes_db, "ecologic_coeffs", ecologic_coeffs)

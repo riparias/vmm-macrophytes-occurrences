@@ -14,7 +14,7 @@ SELECT
   'Tansley vegetation scale'                  AS organismQuantityType,
   o.groeivorm                                 AS occurrenceRemarks,
 -- IDENTIFICATION
-  p.team                                      AS identifiedBy,
+  l.team                                      AS identifiedBy,
   o.gevalideerd                               AS identificationVerificationStatus,
 -- TAXON
   CASE 
@@ -55,6 +55,7 @@ SELECT
     WHEN o.'Macrofyt Rang' = 'Species aggregate' THEN 'speciesAggregate'
   END                                         AS taxonRank,
   o.'Macrofyt Voorkeursnaam'                  AS vernacularName
-FROM observations as o 
- LEFT JOIN positions AS p
-    ON p.meetplaats = o.meetplaats
+
+FROM observations as o
+  LEFT JOIN locations AS l
+    ON o.meetplaats = l.meetplaats
