@@ -12,11 +12,6 @@ SELECT
   'VMM'                                 AS institutionCode,
   'Inland water macrophyte occurrences in Flanders, Belgium' AS datasetName,
   'HumanObservation'                    AS basisOfRecord,
-  '{{"watercourse":"' || l.waterloop ||
-    '", "basin":"' || l.bekken || 
-    '", "waterbodySurfaceCode":"' || l.owl || 
-    '", "waterbodyCategory":"' || l.waterlichaamcategorietype ||
-    '"}}'                               AS dynamicProperties,
 -- EVENT
   f.deelmonster_id                      AS eventID,
   date(f.monsternamedatum)              AS eventDate,

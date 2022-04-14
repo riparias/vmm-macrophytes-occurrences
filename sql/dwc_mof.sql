@@ -2,6 +2,51 @@
 Created by Damiano Oldoni (INBO)
 */
 
+/* LOCATIONS: bekken */
+
+SELECT
+  f.deelmonster_id                      AS eventID,
+  'basin'                               AS measurementType,
+  l.bekken                              AS measurementValue,
+  NULL                                  AS measurementUnit,
+  NULL                                  AS measurementRemarks
+FROM features AS f
+  LEFT JOIN locations AS l
+  ON f.meetplaats = l.meetplaats
+WHERE l.bekken IS NOT NULL
+
+UNION
+
+/* LOCATIONS: owl */
+
+SELECT
+  f.deelmonster_id                      AS eventID,
+  'waterbody surface code'              AS measurementType,
+  l.owl                                 AS measurementValue,
+  NULL                                  AS measurementUnit,
+  NULL                                  AS measurementRemarks
+FROM features AS f
+  LEFT JOIN locations AS l
+  ON f.meetplaats = l.meetplaats
+WHERE l.owl IS NOT NULL
+
+UNION
+
+/* LOCATIONS: bekken */
+
+SELECT
+  f.deelmonster_id                      AS eventID,
+  'waterbody category'                  AS measurementType,
+  l.waterlichaamcategorietype           AS measurementValue,
+  NULL                                  AS measurementUnit,
+  NULL                                  AS measurementRemarks
+FROM features AS f
+  LEFT JOIN locations AS l
+  ON f.meetplaats = l.meetplaats
+WHERE l.waterlichaamcategorietype IS NOT NULL
+
+UNION
+
 /* FEATURES: Totale Bedekking (%) */
 
 SELECT
@@ -10,7 +55,7 @@ SELECT
   f.'Totale Bedekking (%)'              AS measurementValue,
   '%'                                   AS measurementUnit,
   NULL                                  AS measurementRemarks
-FROM features as f
+FROM features AS f
 WHERE f.'Totale Bedekking (%)' IS NOT NULL
 
 UNION
@@ -23,7 +68,7 @@ SELECT
   f.'Bedekking Eutrofiëringsindicatoren (%)' AS measurementValue,
   '%'                                   AS measurementUnit,
   NULL                                  AS measurementRemarks
-FROM features as f
+FROM features AS f
 WHERE f.'Bedekking Eutrofiëringsindicatoren (%)' IS NOT NULL
 
 UNION
@@ -36,7 +81,7 @@ SELECT
   f.'Bedekking Helofyten (%)'           AS measurementValue,
   '%'                                   AS measurementUnit,
   NULL                                  AS measurementRemarks
-FROM features as f
+FROM features AS f
 WHERE f.'Bedekking Helofyten (%)' IS NOT NULL
 
 UNION
@@ -49,7 +94,7 @@ SELECT
   f.'Beschaduwing Macrofyten (%)'       AS measurementValue,
   '%'                                   AS measurementUnit,
   NULL                                  AS measurementRemarks
-FROM features as f
+FROM features AS f
 WHERE f.'Beschaduwing Macrofyten (%)' IS NOT NULL
 
 UNION
@@ -68,7 +113,7 @@ SELECT
   END                                   AS measurementValue,
   'cm'                                  AS measurementUnit,
   NULL                                  AS measurementRemarks
-FROM features as f
+FROM features AS f
 WHERE f.sliblaag IS NOT NULL
 
 UNION
@@ -81,7 +126,7 @@ SELECT
   f.'Laag Grof Organisch Materiaal (cm)' AS measurementValue,
   'cm'                                  AS measurementUnit,
   NULL                                  AS measurementRemarks
-FROM features as f
+FROM features AS f
 WHERE f.'Laag Grof Organisch Materiaal (cm)' IS NOT NULL
 
 UNION
@@ -94,7 +139,7 @@ SELECT
   f.'Breedte Waterspiegel Gemiddeld (cm)' AS measurementValue,
   'cm'                                  AS measurementUnit,
   NULL                                  AS measurementRemarks
-FROM features as f
+FROM features AS f
 WHERE f.'Breedte Waterspiegel Gemiddeld (cm)' IS NOT NULL
 
 UNION
@@ -107,7 +152,7 @@ SELECT
   f.'Breedte Waterspiegel Minimum (cm)' AS measurementValue,
   'cm'                                  AS measurementUnit,
   NULL                                  AS measurementRemarks
-FROM features as f
+FROM features AS f
 WHERE f.'Breedte Waterspiegel Minimum (cm)' IS NOT NULL
 
 UNION
@@ -120,7 +165,7 @@ SELECT
   f.'Breedte Waterspiegel Maximum (cm)' AS measurementValue,
   'cm'                                  AS measurementUnit,
   NULL                                  AS measurementRemarks
-FROM features as f
+FROM features AS f
 WHERE f.'Breedte Waterspiegel Maximum (cm)' IS NOT NULL
 
 UNION
@@ -133,7 +178,7 @@ SELECT
   f.'Diepte Gemiddeld (cm)'             AS measurementValue,
   'cm'                                  AS measurementUnit,
   NULL                                  AS measurementRemarks
-FROM features as f
+FROM features AS f
 WHERE f.'Diepte Gemiddeld (cm)' IS NOT NULL
 
 UNION
@@ -146,7 +191,7 @@ SELECT
   f.'Diepte Minimum (cm)'               AS measurementValue,
   'cm'                                  AS measurementUnit,
   NULL                                  AS measurementRemarks
-FROM features as f
+FROM features AS f
 WHERE f.'Diepte Minimum (cm)' IS NOT NULL
 
 UNION
@@ -159,7 +204,7 @@ SELECT
   f.'Diepte Maximum (cm)'               AS measurementValue,
   'cm'                                  AS measurementUnit,
   NULL                                  AS measurementRemarks
-FROM features as f
+FROM features AS f
 WHERE f.'Diepte Maximum (cm)' IS NOT NULL
 
 UNION
@@ -177,7 +222,7 @@ SELECT
   END                                   AS measurementValue,
   NULL                                  AS measurementUnit,
   NULL                                  AS measurementRemarks
-FROM features as f
+FROM features AS f
 WHERE f.stroming IS NOT NULL
 
 UNION
