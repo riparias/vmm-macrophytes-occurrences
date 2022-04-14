@@ -2,6 +2,188 @@
 Created by Damiano Oldoni (INBO)
 */
 
+/* FEATURES: Totale Bedekking (%) */
+
+SELECT
+  f.deelmonster_id                      AS eventID,
+  'total coverage'                      AS measurementType,
+  f.'Totale Bedekking (%)'              AS measurementValue,
+  '%'                                   AS measurementUnit,
+  NULL                                  AS measurementRemarks
+FROM features as f
+WHERE f.'Totale Bedekking (%)' IS NOT NULL
+
+UNION
+
+/* FEATURES: Bedekking Eutrofiëringsindicatoren (%) */
+
+SELECT
+  f.deelmonster_id                      AS eventID,
+  'eutrophication coverage'             AS measurementType,
+  f.'Bedekking Eutrofiëringsindicatoren (%)' AS measurementValue,
+  '%'                                   AS measurementUnit,
+  NULL                                  AS measurementRemarks
+FROM features as f
+WHERE f.'Bedekking Eutrofiëringsindicatoren (%)' IS NOT NULL
+
+UNION
+
+/* FEATURES: Bedekking Helofyten (%) */
+
+SELECT
+  f.deelmonster_id                      AS eventID,
+  'helophytes coverage'                 AS measurementType,
+  f.'Bedekking Helofyten (%)'           AS measurementValue,
+  '%'                                   AS measurementUnit,
+  NULL                                  AS measurementRemarks
+FROM features as f
+WHERE f.'Bedekking Helofyten (%)' IS NOT NULL
+
+UNION
+
+/* FEATURES: Beschaduwing Macrofyten (%) */
+
+SELECT
+  f.deelmonster_id                      AS eventID,
+  'macrophytes shading'                 AS measurementType,
+  f.'Beschaduwing Macrofyten (%)'       AS measurementValue,
+  '%'                                   AS measurementUnit,
+  NULL                                  AS measurementRemarks
+FROM features as f
+WHERE f.'Beschaduwing Macrofyten (%)' IS NOT NULL
+
+UNION
+
+/* FEATURES: sliblaag */
+
+SELECT
+  f.deelmonster_id                      AS eventID,
+  'sludge level'                        AS measurementType,
+  CASE 
+    WHEN f.sliblaag = '< 5 cm slib' THEN '0-5'
+    WHEN f.sliblaag = '5 à 20 cm slib' THEN '5-20'
+    WHEN f.sliblaag = '> 20 cm slib' THEN '>20'
+    WHEN f.sliblaag = 'slib afwezig' THEN '0'
+    WHEN f.sliblaag = 'slib aanwezig maar meting onmogelijk' THEN '>0'
+  END                                   AS measurementValue,
+  'cm'                                  AS measurementUnit,
+  NULL                                  AS measurementRemarks
+FROM features as f
+WHERE f.sliblaag IS NOT NULL
+
+UNION
+
+/* FEATURES: Laag Grof Organisch Materiaal (cm) */
+
+SELECT
+  f.deelmonster_id                      AS eventID,
+  'coarse organic matter layer'         AS measurementType,
+  f.'Laag Grof Organisch Materiaal (cm)' AS measurementValue,
+  'cm'                                  AS measurementUnit,
+  NULL                                  AS measurementRemarks
+FROM features as f
+WHERE f.'Laag Grof Organisch Materiaal (cm)' IS NOT NULL
+
+UNION
+
+/* FEATURES: Breedte Waterspiegel Gemiddeld (cm) */
+
+SELECT
+  f.deelmonster_id                      AS eventID,
+  'average width water level'           AS measurementType,
+  f.'Breedte Waterspiegel Gemiddeld (cm)' AS measurementValue,
+  'cm'                                  AS measurementUnit,
+  NULL                                  AS measurementRemarks
+FROM features as f
+WHERE f.'Breedte Waterspiegel Gemiddeld (cm)' IS NOT NULL
+
+UNION
+
+/* FEATURES: Breedte Waterspiegel Minimum (cm) */
+
+SELECT
+  f.deelmonster_id                      AS eventID,
+  'minimum width water level'           AS measurementType,
+  f.'Breedte Waterspiegel Minimum (cm)' AS measurementValue,
+  'cm'                                  AS measurementUnit,
+  NULL                                  AS measurementRemarks
+FROM features as f
+WHERE f.'Breedte Waterspiegel Minimum (cm)' IS NOT NULL
+
+UNION
+
+/* FEATURES: Breedte Waterspiegel Maximum (cm) */
+
+SELECT
+  f.deelmonster_id                      AS eventID,
+  'maximum width water level'           AS measurementType,
+  f.'Breedte Waterspiegel Maximum (cm)' AS measurementValue,
+  'cm'                                  AS measurementUnit,
+  NULL                                  AS measurementRemarks
+FROM features as f
+WHERE f.'Breedte Waterspiegel Maximum (cm)' IS NOT NULL
+
+UNION
+
+/* FEATURES: Diepte Gemiddeld (cm) */
+
+SELECT
+  f.deelmonster_id                      AS eventID,
+  'average depth'                       AS measurementType,
+  f.'Diepte Gemiddeld (cm)'             AS measurementValue,
+  'cm'                                  AS measurementUnit,
+  NULL                                  AS measurementRemarks
+FROM features as f
+WHERE f.'Diepte Gemiddeld (cm)' IS NOT NULL
+
+UNION
+
+/* FEATURES: Diepte Minimum (cm) */
+
+SELECT
+  f.deelmonster_id                      AS eventID,
+  'minimum depth'                       AS measurementType,
+  f.'Diepte Minimum (cm)'               AS measurementValue,
+  'cm'                                  AS measurementUnit,
+  NULL                                  AS measurementRemarks
+FROM features as f
+WHERE f.'Diepte Minimum (cm)' IS NOT NULL
+
+UNION
+
+/* FEATURES: Diepte Maximum (cm) */
+
+SELECT
+  f.deelmonster_id                      AS eventID,
+  'maximum depth'                       AS measurementType,
+  f.'Diepte Maximum (cm)'               AS measurementValue,
+  'cm'                                  AS measurementUnit,
+  NULL                                  AS measurementRemarks
+FROM features as f
+WHERE f.'Diepte Maximum (cm)' IS NOT NULL
+
+UNION
+
+/* FEATURES: stroming */
+
+SELECT
+  f.deelmonster_id                      AS eventID,
+  'velocity'                            AS measurementType,
+  CASE
+    WHEN f.stroming = 'Stilstaand / traag' THEN 'stationary / slow'
+    WHEN f.stroming = 'Matig' THEN 'moderate'
+    WHEN f.stroming = 'Snel' THEN 'fast'
+    WHEN f.stroming is NULL THEN NULL
+  END                                   AS measurementValue,
+  NULL                                  AS measurementUnit,
+  NULL                                  AS measurementRemarks
+FROM features as f
+WHERE f.stroming IS NOT NULL
+
+UNION
+
+/* MEASUREMENTS */
+
 SELECT
   m.'Deelmonster ID MOW'                AS eventID,
   CASE
@@ -20,7 +202,6 @@ SELECT
     WHEN m.eenh = '-' THEN NULL
     ELSE m.eenh
   END                                   AS measurementUnit,
-  m.monsternamedatum                    AS measurementDeterminedDate,
   CASE
     WHEN m.par = 'Secchi' AND m.'Secchischijf op Bodem' = 'Ja' THEN 'Secchi disk at the bottom'
     WHEN m.par = 'Secchi' AND m.'Secchischijf op Bodem' = 'Nee' THEN 'Secchi disk not at the bottom'
@@ -30,228 +211,33 @@ FROM
 
 UNION
 
-/* FEATURES sludge_level*/
-
-SELECT
-  f.deelmonster_id                      AS eventID,
-  'sludge level'                        AS measurementType,
-  CASE 
-    WHEN f.sliblaag = '< 5 cm slib' THEN '0-5'
-    WHEN f.sliblaag = '5 à 20 cm slib' THEN '5-20'
-    WHEN f.sliblaag = '> 20 cm slib' THEN '>20'
-    WHEN f.sliblaag = 'slib afwezig' THEN '0'
-    WHEN f.sliblaag = 'slib aanwezig maar meting onmogelijk' THEN '>0'
-  END                                   AS measurementValue,
-  'cm'                                  AS measurementUnit,
-  f.monsternamedatum                    AS measurementDeterminedDate,
-  NULL                                  AS measurementRemarks
-FROM features as f
-WHERE f.sliblaag IS NOT NULL
-
-UNION
-
-/* FEATURES coarse_organic_matter_layer */
-
-SELECT
-  f.deelmonster_id                      AS eventID,
-  'coarse organic matter layer'         AS measurementType,
-  f.'Laag Grof Organisch Materiaal (cm)' AS measurementValue,
-  'cm'                                  AS measurementUnit,
-  f.monsternamedatum                    AS measurementDeterminedDate,
-  NULL                                  AS measurementRemarks
-FROM features as f
-WHERE f.'Laag Grof Organisch Materiaal (cm)' IS NOT NULL
-
-UNION
-
-/* FEATURES average_width_water_level */
-
-SELECT
-  f.deelmonster_id                      AS eventID,
-  'average width water level'           AS measurementType,
-  f.'Breedte Waterspiegel Gemiddeld (cm)' AS measurementValue,
-  'cm'                                  AS measurementUnit,
-  f.monsternamedatum                    AS measurementDeterminedDate,
-  NULL                                  AS measurementRemarks
-FROM features as f
-WHERE f.'Breedte Waterspiegel Gemiddeld (cm)' IS NOT NULL
-
-UNION
-
-/* FEATURES minimum_width_water_level */
-
-SELECT
-  f.deelmonster_id                      AS eventID,
-  'minimum width water level'           AS measurementType,
-  f.'Breedte Waterspiegel Minimum (cm)' AS measurementValue,
-  'cm'                                  AS measurementUnit,
-  f.monsternamedatum                    AS measurementDeterminedDate,
-  NULL                                  AS measurementRemarks
-FROM features as f
-WHERE f.'Breedte Waterspiegel Minimum (cm)' IS NOT NULL
-
-UNION
-
-/* FEATURES maximum_width_water_level */
-
-SELECT
-  f.deelmonster_id                      AS eventID,
-  'maximum width water level'           AS measurementType,
-  f.'Breedte Waterspiegel Maximum (cm)' AS measurementValue,
-  'cm'                                  AS measurementUnit,
-  f.monsternamedatum                    AS measurementDeterminedDate,
-  NULL                                  AS measurementRemarks
-FROM features as f
-WHERE f.'Breedte Waterspiegel Maximum (cm)' IS NOT NULL
-
-UNION
-
-/* FEATURES average_depth */
-
-SELECT
-  f.deelmonster_id                      AS eventID,
-  'average depth'                       AS measurementType,
-  f.'Diepte Gemiddeld (cm)'             AS measurementValue,
-  'cm'                                  AS measurementUnit,
-  f.monsternamedatum                    AS measurementDeterminedDate,
-  NULL                                  AS measurementRemarks
-FROM features as f
-WHERE f.'Diepte Gemiddeld (cm)' IS NOT NULL
-
-UNION
-
-/* FEATURES minimum_depth */
-
-SELECT
-  f.deelmonster_id                      AS eventID,
-  'minimum depth'                       AS measurementType,
-  f.'Diepte Minimum (cm)'               AS measurementValue,
-  'cm'                                  AS measurementUnit,
-  f.monsternamedatum                    AS measurementDeterminedDate,
-  NULL                                  AS measurementRemarks
-FROM features as f
-WHERE f.'Diepte Minimum (cm)' IS NOT NULL
-
-UNION
-
-/* FEATURES maximum_depth */
-
-SELECT
-  f.deelmonster_id                      AS eventID,
-  'maximum depth'                       AS measurementType,
-  f.'Diepte Maximum (cm)'               AS measurementValue,
-  'cm'                                  AS measurementUnit,
-  f.monsternamedatum                    AS measurementDeterminedDate,
-  NULL                                  AS measurementRemarks
-FROM features as f
-WHERE f.'Diepte Maximum (cm)' IS NOT NULL
-
-UNION
-
-/* FEATURES total_coverage */
-
-SELECT
-  f.deelmonster_id                      AS eventID,
-  'total coverage'                      AS measurementType,
-  f.'Totale Bedekking (%)'              AS measurementValue,
-  '%'                                   AS measurementUnit,
-  f.monsternamedatum                    AS measurementDeterminedDate,
-  NULL                                  AS measurementRemarks
-FROM features as f
-WHERE f.'Totale Bedekking (%)' IS NOT NULL
-
-UNION
-
-/* FEATURES eutrophication_coverage */
-
-SELECT
-  f.deelmonster_id                      AS eventID,
-  'eutrophication coverage'             AS measurementType,
-  f.'Bedekking Eutrofiëringsindicatoren (%)' AS measurementValue,
-  '%'                                   AS measurementUnit,
-  f.monsternamedatum                    AS measurementDeterminedDate,
-  NULL                                  AS measurementRemarks
-FROM features as f
-WHERE f.'Bedekking Eutrofiëringsindicatoren (%)' IS NOT NULL
-
-UNION
-
-/* FEATURES helophytes_coverage */
-
-SELECT
-  f.deelmonster_id                      AS eventID,
-  'helophytes coverage'                 AS measurementType,
-  f.'Bedekking Helofyten (%)'           AS measurementValue,
-  '%'                                   AS measurementUnit,
-  f.monsternamedatum                    AS measurementDeterminedDate,
-  NULL                                  AS measurementRemarks
-FROM features as f
-WHERE f.'Bedekking Helofyten (%)' IS NOT NULL
-
-UNION
-
-/* FEATURES macrophytes_shading */
-
-SELECT
-  f.deelmonster_id                      AS eventID,
-  'macrophytes shading'                 AS measurementType,
-  f.'Beschaduwing Macrofyten (%)'       AS measurementValue,
-  '%'                                   AS measurementUnit,
-  f.monsternamedatum                    AS measurementDeterminedDate,
-  NULL                                  AS measurementRemarks
-FROM features as f
-WHERE f.'Beschaduwing Macrofyten (%)' IS NOT NULL
-
-UNION
-
-/* FEATURES current */
-
-SELECT
-  f.deelmonster_id                      AS eventID,
-  'current'                             AS measurementType,
-  CASE
-    WHEN f.stroming = 'Stilstaand / traag' THEN 'stationary-slow'
-    WHEN f.stroming = 'Matig' THEN 'moderate'
-    WHEN f.stroming = 'Snel' THEN 'fast'
-    WHEN f.stroming is NULL THEN NULL
-  END                                   AS measurementValue,
-  NULL                                  AS measurementUnit,
-  f.monsternamedatum                    AS measurementDeterminedDate,
-  NULL                                  AS measurementRemarks
-FROM features as f
-WHERE f.stroming IS NOT NULL
-
-UNION
-
-/* ECOLOGIC COEFFICIENT ecologic_quality_coefficient_with_gep */
+/* ECOLOGIC COEFFICIENT: index GEP */
 
 SELECT
   e.'Deelmonster ID'                    AS eventID,
   'ecologic quality coefficient with GEP' AS measurementType,
   e.'index GEP'                         AS measurementValue,
   NULL                                  AS measurementUnit,
-  e.monsternamedatum                    AS measurementDeterminedDate,
   NULL                                  AS measurementRemarks
 FROM ecologic_coeffs as e
 WHERE e.'index GEP' IS NOT NULL
 
 UNION
 
-/* ECOLOGIC COEFFICIENT ecologic_quality_coefficient_without_gep */
+/* ECOLOGIC COEFFICIENT: index ZONDER gep */
 
 SELECT
   e.'Deelmonster ID'                    AS eventID,
   'ecologic quality coefficient without GEP' AS measurementType,
   e.'index ZONDER gep'                  AS measurementValue,
   NULL                                  AS measurementUnit,
-  e.monsternamedatum                    AS measurementDeterminedDate,
   NULL                                  AS measurementRemarks
 FROM ecologic_coeffs as e
 WHERE e.'index ZONDER gep' IS NOT NULL
 
 UNION
 
-/* ECOLOGIC COEFFICIENT ecologic_quality_coefficient_class */
+/* ECOLOGIC COEFFICIENT: klasse */
 
 SELECT
   e.'Deelmonster ID'                    AS eventID,
@@ -264,14 +250,13 @@ SELECT
     WHEN e.'klasse' = 'GOED EN HOGER' THEN 'very good'
   END                                   AS measurementValue,
   NULL                                  AS measurementUnit,
-  e.monsternamedatum                    AS measurementDeterminedDate,
   NULL                                  AS measurementRemarks
 FROM ecologic_coeffs as e
 WHERE e.'index ZONDER gep' IS NOT NULL
 
 UNION
 
-/* ECOLOGIC COEFFICIENT status */
+/* ECOLOGIC COEFFICIENT: status */
 
 SELECT
   e.'Deelmonster ID'                    AS eventID,
@@ -282,42 +267,24 @@ SELECT
     WHEN e.status = 'NAT' THEN 'natural'
   END                                   AS measurementValue,
   NULL                                  AS measurementUnit,
-  e.monsternamedatum                    AS measurementDeterminedDate,
   NULL                                  AS measurementRemarks
 FROM ecologic_coeffs as e
 WHERE e.status IS NOT NULL
 
 UNION
 
-/* VEGETATION DEVELOPMENT  submerged_code */
+/* VEGETATION DEVELOPMENT */
 
 SELECT
-  v.deelmonster_id || ':' || v.interval AS eventID,
-  'submerged code'                      AS measurementType,
-  v.'Submers Code'                      AS measurementValue,
-  NULL                                  AS measurementUnit,
-  v.monsternamedatum                    AS measurementDeterminedDate,
-  NULL                                  AS measurementRemarks
-FROM vegetations as v
-WHERE v.'Submers Code' IS NOT NULL
-
-UNION
-
-/* VEGETATION DEVELOPMENT  submerged_category */
-
-SELECT
-  v.deelmonster_id || ':' || v.interval AS eventID,
-  'submerged category'                  AS measurementType,
-  CASE 
-    WHEN v.submers = 'geen ondergedoken vegetatie' THEN 'no submerged vegetation'
-    WHEN v.submers = 'Planten schaars' THEN 'plants scarce'
-    WHEN v.submers = 'Planten frequent tot talrijk maar niet de gehele waterkolom opvullend' 
-      THEN 'plants frequent to numerous but not filling the entire water column'
-    WHEN v.submers = 'Waterkolom grotendeels tot geheel opgevuld' 
-      THEN 'Water column largely to completely filled up'
+  v.deelmonster_id                      AS eventID,
+  'submerged plants at ' || interval || ' from shore' AS measurementType,
+  CASE
+    WHEN v.'Submers Code' = 0 THEN 'none' -- Geen ondergedoken vegetatie
+    WHEN v.'Submers Code' = 1 THEN 'rare' -- Planten schaars
+    WHEN v.'Submers Code' = 2 THEN 'frequent to abundant' -- Planten frequent tot talrijk maar niet de gehele waterkolom opvullend
+    WHEN v.'Submers Code' = 3 THEN 'filling entire water column' -- Waterkolom grotendeels tot geheel opgevuld
   END                                   AS measurementValue,
   NULL                                  AS measurementUnit,
-  v.monsternamedatum                    AS measurementDeterminedDate,
-  NULL                                  AS measurementRemarks
+  v.opmerking                           AS measurementRemarks
 FROM vegetations as v
-WHERE v.'submers' IS NOT NULL
+WHERE v.'Submers Code' IS NOT NULL
