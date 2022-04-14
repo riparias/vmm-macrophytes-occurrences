@@ -5,14 +5,6 @@ Created by Damiano Oldoni (INBO)
 SELECT
   m.'Deelmonster ID MOW'                AS eventID,
   CASE
-    WHEN m.par = 'T' THEN m.'Deelmonster ID MOW' || ':' || 'temperature'
-    WHEN m.par = 'pH' THEN m.'Deelmonster ID MOW' || ':' || 'pH'
-    WHEN m.par = 'O2' THEN m.'Deelmonster ID MOW' || ':' || 'dissolved_oxygen'
-    WHEN m.par = 'O2 verz' THEN m.'Deelmonster ID MOW' || ':' || 'oxygen_saturation'
-    WHEN m.par = 'EC 20' THEN m.'Deelmonster ID MOW' || ':' || 'electrical_conductivity'
-    WHEN m.par = 'Secchi' THEN m.'Deelmonster ID MOW' || ':' || 'Secchi_depth'
-  END                                   AS measurementID,
-  CASE
     WHEN m.par = 'T' THEN 'temperature'
     WHEN m.par = 'pH' THEN 'pH'
     WHEN m.par = 'O2' THEN 'dissolved oxygen'
@@ -42,7 +34,6 @@ UNION
 
 SELECT
   f.deelmonster_id                      AS eventID,
-  f.deelmonster_id || ':' || 'sludge_level' AS measurementID,
   'sludge level'                        AS measurementType,
   CASE 
     WHEN f.sliblaag = '< 5 cm slib' THEN '0-5'
@@ -63,7 +54,6 @@ UNION
 
 SELECT
   f.deelmonster_id                      AS eventID,
-  f.deelmonster_id || ':' || 'coarse_organic_matter_layer' AS measurementID,
   'coarse organic matter layer'         AS measurementType,
   f.'Laag Grof Organisch Materiaal (cm)' AS measurementValue,
   'cm'                                  AS measurementUnit,
@@ -78,7 +68,6 @@ UNION
 
 SELECT
   f.deelmonster_id                      AS eventID,
-  f.deelmonster_id || ':' || 'average_width_water_level' AS measurementID,
   'average width water level'           AS measurementType,
   f.'Breedte Waterspiegel Gemiddeld (cm)' AS measurementValue,
   'cm'                                  AS measurementUnit,
@@ -93,7 +82,6 @@ UNION
 
 SELECT
   f.deelmonster_id                      AS eventID,
-  f.deelmonster_id || ':' || 'minimum_width_water_level' AS measurementID,
   'minimum width water level'           AS measurementType,
   f.'Breedte Waterspiegel Minimum (cm)' AS measurementValue,
   'cm'                                  AS measurementUnit,
@@ -108,7 +96,6 @@ UNION
 
 SELECT
   f.deelmonster_id                      AS eventID,
-  f.deelmonster_id || ':' || 'maximum_width_water_level' AS measurementID,
   'maximum width water level'           AS measurementType,
   f.'Breedte Waterspiegel Maximum (cm)' AS measurementValue,
   'cm'                                  AS measurementUnit,
@@ -123,7 +110,6 @@ UNION
 
 SELECT
   f.deelmonster_id                      AS eventID,
-  f.deelmonster_id || ':' || 'average_depth' AS measurementID,
   'average depth'                       AS measurementType,
   f.'Diepte Gemiddeld (cm)'             AS measurementValue,
   'cm'                                  AS measurementUnit,
@@ -138,7 +124,6 @@ UNION
 
 SELECT
   f.deelmonster_id                      AS eventID,
-  f.deelmonster_id || ':' || 'minimum_depth' AS measurementID,
   'minimum depth'                       AS measurementType,
   f.'Diepte Minimum (cm)'               AS measurementValue,
   'cm'                                  AS measurementUnit,
@@ -153,7 +138,6 @@ UNION
 
 SELECT
   f.deelmonster_id                      AS eventID,
-  f.deelmonster_id || ':' || 'maximum_depth' AS measurementID,
   'maximum depth'                       AS measurementType,
   f.'Diepte Maximum (cm)'               AS measurementValue,
   'cm'                                  AS measurementUnit,
@@ -168,7 +152,6 @@ UNION
 
 SELECT
   f.deelmonster_id                      AS eventID,
-  f.deelmonster_id || ':' || 'total_coverage' AS measurementID,
   'total coverage'                      AS measurementType,
   f.'Totale Bedekking (%)'              AS measurementValue,
   '%'                                   AS measurementUnit,
@@ -183,7 +166,6 @@ UNION
 
 SELECT
   f.deelmonster_id                      AS eventID,
-  f.deelmonster_id || ':' || 'eutrophication_coverage' AS measurementID,
   'eutrophication coverage'             AS measurementType,
   f.'Bedekking Eutrofiëringsindicatoren (%)' AS measurementValue,
   '%'                                   AS measurementUnit,
@@ -198,7 +180,6 @@ UNION
 
 SELECT
   f.deelmonster_id                      AS eventID,
-  f.deelmonster_id || ':' || 'helophytes_coverage' AS measurementID,
   'helophytes coverage'                 AS measurementType,
   f.'Bedekking Helofyten (%)'           AS measurementValue,
   '%'                                   AS measurementUnit,
@@ -213,7 +194,6 @@ UNION
 
 SELECT
   f.deelmonster_id                      AS eventID,
-  f.deelmonster_id || ':' || 'macrophytes_shading' AS measurementID,
   'macrophytes shading'                 AS measurementType,
   f.'Beschaduwing Macrofyten (%)'       AS measurementValue,
   '%'                                   AS measurementUnit,
@@ -228,7 +208,6 @@ UNION
 
 SELECT
   f.deelmonster_id                      AS eventID,
-  f.deelmonster_id || ':' || 'current'  AS measurementID,
   'current'                             AS measurementType,
   CASE
     WHEN f.stroming = 'Stilstaand / traag' THEN 'stationary-slow'
@@ -248,7 +227,6 @@ UNION
 
 SELECT
   e.'Deelmonster ID'                    AS eventID,
-  e.'Deelmonster ID' || ':' || 'ecologic_quality_coefficient_with_gep' AS measurementID,
   'ecologic quality coefficient with GEP' AS measurementType,
   e.'index GEP'                         AS measurementValue,
   NULL                                  AS measurementUnit,
@@ -263,7 +241,6 @@ UNION
 
 SELECT
   e.'Deelmonster ID'                    AS eventID,
-  e.'Deelmonster ID' || ':' || 'ecologic_quality_coefficient_without_gep' AS measurementID,
   'ecologic quality coefficient without GEP' AS measurementType,
   e.'index ZONDER gep'                  AS measurementValue,
   NULL                                  AS measurementUnit,
@@ -278,7 +255,6 @@ UNION
 
 SELECT
   e.'Deelmonster ID'                    AS eventID,
-  e.'Deelmonster ID' || ':' || 'ecologic_quality_coefficient_class' AS measurementID,
   'ecologic quality coefficient class'  AS measurementType,
   CASE 
     WHEN e.'klasse' = 'SLECHT' THEN 'poor'
@@ -299,7 +275,6 @@ UNION
 
 SELECT
   e.'Deelmonster ID'                    AS eventID,
-  e.'Deelmonster ID' || ':' || 'status' AS measurementID,
   'status'                              AS measurementType,
   CASE 
     WHEN e.status = 'DEFAU' THEN 'default'
@@ -318,7 +293,6 @@ UNION
 
 SELECT
   v.deelmonster_id || ':' || v.interval AS eventID,
-  v.deelmonster_id || ':' || v.interval || ':' || 'submerged_code' AS measurementID,
   'submerged code'                      AS measurementType,
   v.'Submers Code'                      AS measurementValue,
   NULL                                  AS measurementUnit,
@@ -333,7 +307,6 @@ UNION
 
 SELECT
   v.deelmonster_id || ':' || v.interval AS eventID,
-  v.deelmonster_id || ':' || v.interval || ':' || 'submerged_category' AS measurementID,
   'submerged category'                  AS measurementType,
   CASE 
     WHEN v.submers = 'geen ondergedoken vegetatie' THEN 'no submerged vegetation'
