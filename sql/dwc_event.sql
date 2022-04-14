@@ -18,12 +18,10 @@ SELECT
     '", "waterbodyCategory":"' || p.waterlichaamcategorietype ||
     '"}}'                               AS dynamicProperties,
 -- EVENT
-  e.eventID                             AS eventID,
-  e.parentEventID                       AS parentEventID,
-  date(e.monsternamedatum)              AS eventDate,
-  e.eventRemarks                        AS eventRemarks,
+  f.deelmonster_id                      AS eventID,
+  date(f.monsternamedatum)              AS eventDate,
 -- LOCATION
-  p.meetplaats                          AS locationID,
+  f.meetplaats                          AS locationID,
   'Europe'                              AS continent,
   p.waterlichaam                        AS waterBody,
   'BE'                                  AS countryCode,
@@ -39,7 +37,7 @@ SELECT
   END                                   AS stateProvince,
   p.gemeente                            AS municipality,
   0                                     AS minimumDepthInMeters,
-  CAST(e.'Diepte Maximum (cm)' AS REAL) / 100 AS maximumDepthInMeters,
+  CAST(f.'Diepte Maximum (cm)' AS REAL) / 100 AS maximumDepthInMeters,
   p.omschrijving                        AS locationRemarks,
   printf('%.5f', ROUND(p.decimalLatitude, 5)) AS decimalLatitude,
   printf('%.5f', ROUND(p.decimalLongitude, 5)) AS decimalLongitude,
@@ -50,43 +48,6 @@ SELECT
   'EPSG:31370'                          AS verbatimSRS,
   'Belgian Lambert 72'                  AS verbatimCoordinateSystem
 
-FROM (
-  
-/* FEATURES */
-  
-SELECT
-  f.deelmonster_id                      AS eventID,
-  NULL                                  AS parentEventID,
-  NULL                                  AS eventRemarks,
-  f.meetplaats,
-  f.'Diepte Maximum (cm)',
-  f.monsternamedatum,
-  f.Jaar
-FROM
-  features AS f
-
-UNION
-
-/* VEGETATIONS */
-/*
-Create separate child events for VEGETATIONS info at different 'interval' values
-The few deelmonster IDs not present in features are excluded to avoid poining to
-not existing parentEventID.
-*/
-
-SELECT
-  v.deelmonster_id || ':' || v.interval AS eventID,
-  v.deelmonster_id                      AS parentEventID,
-  NULL                                  AS eventRemarks,
-  f.meetplaats,
-  f.'Diepte Maximum (cm)',
-  f.monsternamedatum,
-  f.Jaar
-FROM vegetations as v
-  INNER JOIN features as f
-  ON f.deelmonster_id = v.deelmonster_id
-
-) AS e
-
-LEFT JOIN positions AS p
-  ON p.meetplaats = e.meetplaats
+FROM features AS f
+  LEFT JOIN positions AS p
+    ON f.meetplaats = p.meetplaats
