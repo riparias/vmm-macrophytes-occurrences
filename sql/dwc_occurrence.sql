@@ -13,32 +13,34 @@ SELECT
     ELSE o.'Tansley Code'
   END                                         AS organismQuantity,
   'Tansley vegetation scale'                  AS organismQuantityType,
-  'growth form: ' || -- Mostly based on Wiegleb (1991) https://academic.oup.com/view-large/83960091
+  'growth form: ' ||
   CASE
+  -- Terms based on Wiegleb (1991) https://academic.oup.com/view-large/83960091
     WHEN o.groeivorm = 'Batrachiiden' THEN 'Batrachiden'
     WHEN o.groeivorm = 'Ceratophylliden' THEN 'Ceratophylliden'
     WHEN o.groeivorm = 'Chariden' THEN 'Hydrochariden'
     WHEN o.groeivorm = 'Elodeïden' THEN 'Elodeiden'
-    WHEN o.groeivorm = 'Enteromorpha' THEN 'Enteromorpha' -- Not in Wiegleb (1991)
-    WHEN o.groeivorm = 'Filamenteuze algen' THEN 'Filamentous algae' -- Not in Wiegleb (1991)
-    WHEN o.groeivorm = 'Grote monocotylen' THEN 'Big monocotyledons' -- Not in Wiegleb (1991)
-    WHEN o.groeivorm = 'Houtig' THEN 'wood' -- Not in Wiegleb (1991)
     WHEN o.groeivorm = 'Hydrochariden' THEN 'Hydrochariden'
     WHEN o.groeivorm = 'Isoëtiden' THEN 'Isoetiden'
-    WHEN o.groeivorm = 'Land' THEN 'terrestrial' -- Not in Wiegleb (1991)
     WHEN o.groeivorm = 'Lemniden' THEN 'Lemniden'
     WHEN o.groeivorm = 'Magnopotamiden' THEN 'Magnopotamiden'
-    WHEN o.groeivorm = 'Oever/moeras' THEN NULL
     WHEN o.groeivorm = 'Myriophylliden' THEN 'Myriophylliden'
     WHEN o.groeivorm = 'Nymphaeïden' THEN 'Nymphaeiden'
-    WHEN o.groeivorm = 'Onbepaald' THEN 'undetermined' -- Not in Wiegleb (1991)
     WHEN o.groeivorm = 'Parvopotamiden' THEN 'Parvopotamiden'
     WHEN o.groeivorm = 'Pepliden' THEN 'Pepliden'
     WHEN o.groeivorm = 'Riccielliden' THEN 'Riccielliden'
     WHEN o.groeivorm = 'Stratiotiden' THEN 'Stratiotiden'
     WHEN o.groeivorm = 'Vallisneriden' THEN 'Vallisneriden'
-    WHEN o.groeivorm = 'Veenmos' THEN 'Sphagnum' -- Not in Wiegleb (1991)
-    WHEN o.groeivorm = 'Watermossen' THEN 'water moss' -- Not in Wiegleb (1991)
+  -- Custom terms
+    WHEN o.groeivorm = 'Enteromorpha' THEN 'Enteromorpha'
+    WHEN o.groeivorm = 'Filamenteuze algen' THEN 'Filamentous algae'
+    WHEN o.groeivorm = 'Grote monocotylen' THEN 'Big monocotyledons'
+    WHEN o.groeivorm = 'Houtig' THEN 'wood'
+    WHEN o.groeivorm = 'Land' THEN 'terrestrial'
+    WHEN o.groeivorm = 'Oever/moeras' THEN 'shore and marsh plants'
+    WHEN o.groeivorm = 'Onbepaald' THEN 'undetermined'
+    WHEN o.groeivorm = 'Veenmos' THEN 'Sphagnum'
+    WHEN o.groeivorm = 'Watermossen' THEN 'water moss'
   END                                         AS occurrenceRemarks,
 -- IDENTIFICATION
   l.team                                      AS identifiedBy,
