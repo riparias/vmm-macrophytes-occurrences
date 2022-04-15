@@ -52,11 +52,11 @@ UNION
 SELECT
   f.deelmonster_id                      AS eventID,
   'total coverage'                      AS measurementType,
-  f.'Totale Bedekking (%)'              AS measurementValue,
+  f."Totale Bedekking (%)"              AS measurementValue,
   '%'                                   AS measurementUnit,
   NULL                                  AS measurementRemarks
 FROM features AS f
-WHERE f.'Totale Bedekking (%)' IS NOT NULL
+WHERE f."Totale Bedekking (%)" IS NOT NULL
 
 UNION
 
@@ -65,11 +65,11 @@ UNION
 SELECT
   f.deelmonster_id                      AS eventID,
   'eutrophication coverage'             AS measurementType,
-  f.'Bedekking Eutrofiëringsindicatoren (%)' AS measurementValue,
+  f."Bedekking Eutrofiëringsindicatoren (%)" AS measurementValue,
   '%'                                   AS measurementUnit,
   NULL                                  AS measurementRemarks
 FROM features AS f
-WHERE f.'Bedekking Eutrofiëringsindicatoren (%)' IS NOT NULL
+WHERE f."Bedekking Eutrofiëringsindicatoren (%)" IS NOT NULL
 
 UNION
 
@@ -78,11 +78,11 @@ UNION
 SELECT
   f.deelmonster_id                      AS eventID,
   'helophytes coverage'                 AS measurementType,
-  f.'Bedekking Helofyten (%)'           AS measurementValue,
+  f."Bedekking Helofyten (%)"           AS measurementValue,
   '%'                                   AS measurementUnit,
   NULL                                  AS measurementRemarks
 FROM features AS f
-WHERE f.'Bedekking Helofyten (%)' IS NOT NULL
+WHERE f."Bedekking Helofyten (%)" IS NOT NULL
 
 UNION
 
@@ -91,11 +91,11 @@ UNION
 SELECT
   f.deelmonster_id                      AS eventID,
   'macrophytes shading'                 AS measurementType,
-  f.'Beschaduwing Macrofyten (%)'       AS measurementValue,
+  f."Beschaduwing Macrofyten (%)"       AS measurementValue,
   '%'                                   AS measurementUnit,
   NULL                                  AS measurementRemarks
 FROM features AS f
-WHERE f.'Beschaduwing Macrofyten (%)' IS NOT NULL
+WHERE f."Beschaduwing Macrofyten (%)" IS NOT NULL
 
 UNION
 
@@ -123,11 +123,11 @@ UNION
 SELECT
   f.deelmonster_id                      AS eventID,
   'coarse organic matter layer'         AS measurementType,
-  f.'Laag Grof Organisch Materiaal (cm)' AS measurementValue,
+  f."Laag Grof Organisch Materiaal (cm)" AS measurementValue,
   'cm'                                  AS measurementUnit,
   NULL                                  AS measurementRemarks
 FROM features AS f
-WHERE f.'Laag Grof Organisch Materiaal (cm)' IS NOT NULL
+WHERE f."Laag Grof Organisch Materiaal (cm)" IS NOT NULL
 
 UNION
 
@@ -136,11 +136,11 @@ UNION
 SELECT
   f.deelmonster_id                      AS eventID,
   'average width water level'           AS measurementType,
-  f.'Breedte Waterspiegel Gemiddeld (cm)' AS measurementValue,
+  f."Breedte Waterspiegel Gemiddeld (cm)" AS measurementValue,
   'cm'                                  AS measurementUnit,
   NULL                                  AS measurementRemarks
 FROM features AS f
-WHERE f.'Breedte Waterspiegel Gemiddeld (cm)' IS NOT NULL
+WHERE f."Breedte Waterspiegel Gemiddeld (cm)" IS NOT NULL
 
 UNION
 
@@ -149,11 +149,11 @@ UNION
 SELECT
   f.deelmonster_id                      AS eventID,
   'minimum width water level'           AS measurementType,
-  f.'Breedte Waterspiegel Minimum (cm)' AS measurementValue,
+  f."Breedte Waterspiegel Minimum (cm)" AS measurementValue,
   'cm'                                  AS measurementUnit,
   NULL                                  AS measurementRemarks
 FROM features AS f
-WHERE f.'Breedte Waterspiegel Minimum (cm)' IS NOT NULL
+WHERE f."Breedte Waterspiegel Minimum (cm)" IS NOT NULL
 
 UNION
 
@@ -162,11 +162,11 @@ UNION
 SELECT
   f.deelmonster_id                      AS eventID,
   'maximum width water level'           AS measurementType,
-  f.'Breedte Waterspiegel Maximum (cm)' AS measurementValue,
+  f."Breedte Waterspiegel Maximum (cm)" AS measurementValue,
   'cm'                                  AS measurementUnit,
   NULL                                  AS measurementRemarks
 FROM features AS f
-WHERE f.'Breedte Waterspiegel Maximum (cm)' IS NOT NULL
+WHERE f."Breedte Waterspiegel Maximum (cm)" IS NOT NULL
 
 UNION
 
@@ -175,11 +175,11 @@ UNION
 SELECT
   f.deelmonster_id                      AS eventID,
   'average depth'                       AS measurementType,
-  f.'Diepte Gemiddeld (cm)'             AS measurementValue,
+  f."Diepte Gemiddeld (cm)"             AS measurementValue,
   'cm'                                  AS measurementUnit,
   NULL                                  AS measurementRemarks
 FROM features AS f
-WHERE f.'Diepte Gemiddeld (cm)' IS NOT NULL
+WHERE f."Diepte Gemiddeld (cm)" IS NOT NULL
 
 UNION
 
@@ -188,11 +188,11 @@ UNION
 SELECT
   f.deelmonster_id                      AS eventID,
   'minimum depth'                       AS measurementType,
-  f.'Diepte Minimum (cm)'               AS measurementValue,
+  f."Diepte Minimum (cm)"               AS measurementValue,
   'cm'                                  AS measurementUnit,
   NULL                                  AS measurementRemarks
 FROM features AS f
-WHERE f.'Diepte Minimum (cm)' IS NOT NULL
+WHERE f."Diepte Minimum (cm)" IS NOT NULL
 
 UNION
 
@@ -201,11 +201,11 @@ UNION
 SELECT
   f.deelmonster_id                      AS eventID,
   'maximum depth'                       AS measurementType,
-  f.'Diepte Maximum (cm)'               AS measurementValue,
+  f."Diepte Maximum (cm)"               AS measurementValue,
   'cm'                                  AS measurementUnit,
   NULL                                  AS measurementRemarks
 FROM features AS f
-WHERE f.'Diepte Maximum (cm)' IS NOT NULL
+WHERE f."Diepte Maximum (cm)" IS NOT NULL
 
 UNION
 
@@ -230,7 +230,7 @@ UNION
 /* MEASUREMENTS */
 
 SELECT
-  m.'Deelmonster ID MOW'                AS eventID,
+  m."Deelmonster ID MOW"                AS eventID,
   CASE
     WHEN m.par = 'T' THEN 'temperature'
     WHEN m.par = 'pH' THEN 'pH'
@@ -248,8 +248,8 @@ SELECT
     ELSE m.eenh
   END                                   AS measurementUnit,
   CASE
-    WHEN m.par = 'Secchi' AND m.'Secchischijf op Bodem' = 'Ja' THEN 'Secchi disk at the bottom'
-    WHEN m.par = 'Secchi' AND m.'Secchischijf op Bodem' = 'Nee' THEN 'Secchi disk not at the bottom'
+    WHEN m.par = 'Secchi' AND m."Secchischijf op Bodem" = 'Ja' THEN 'Secchi disk at the bottom'
+    WHEN m.par = 'Secchi' AND m."Secchischijf op Bodem" = 'Nee' THEN 'Secchi disk not at the bottom'
   END                                   AS measurementRemarks
 FROM
   measurements as m
@@ -259,52 +259,52 @@ UNION
 /* ECOLOGIC COEFFICIENT: index GEP */
 
 SELECT
-  e.'Deelmonster ID'                    AS eventID,
+  e."Deelmonster ID"                    AS eventID,
   'ecologic quality coefficient with GEP' AS measurementType,
-  e.'index GEP'                         AS measurementValue,
+  e."index GEP"                         AS measurementValue,
   NULL                                  AS measurementUnit,
   NULL                                  AS measurementRemarks
 FROM ecologic_coeffs as e
-WHERE e.'index GEP' IS NOT NULL
+WHERE e."index GEP" IS NOT NULL
 
 UNION
 
 /* ECOLOGIC COEFFICIENT: index ZONDER gep */
 
 SELECT
-  e.'Deelmonster ID'                    AS eventID,
+  e."Deelmonster ID"                    AS eventID,
   'ecologic quality coefficient without GEP' AS measurementType,
-  e.'index ZONDER gep'                  AS measurementValue,
+  e."index ZONDER gep"                  AS measurementValue,
   NULL                                  AS measurementUnit,
   NULL                                  AS measurementRemarks
 FROM ecologic_coeffs as e
-WHERE e.'index ZONDER gep' IS NOT NULL
+WHERE e."index ZONDER gep" IS NOT NULL
 
 UNION
 
 /* ECOLOGIC COEFFICIENT: klasse */
 
 SELECT
-  e.'Deelmonster ID'                    AS eventID,
+  e."Deelmonster ID"                    AS eventID,
   'ecologic quality coefficient class'  AS measurementType,
   CASE 
-    WHEN e.'klasse' = 'SLECHT' THEN 'poor'
-    WHEN e.'klasse' = 'ONTOEREIKEND' THEN 'insufficient'
-    WHEN e.'klasse' = 'MATIG' THEN 'fair'
-    WHEN e.'klasse' = 'GOED' THEN 'good'
-    WHEN e.'klasse' = 'GOED EN HOGER' THEN 'very good'
+    WHEN e.klasse = 'SLECHT' THEN 'poor'
+    WHEN e.klasse = 'ONTOEREIKEND' THEN 'insufficient'
+    WHEN e.klasse = 'MATIG' THEN 'fair'
+    WHEN e.klasse = 'GOED' THEN 'good'
+    WHEN e.klasse = 'GOED EN HOGER' THEN 'very good'
   END                                   AS measurementValue,
   NULL                                  AS measurementUnit,
   NULL                                  AS measurementRemarks
 FROM ecologic_coeffs as e
-WHERE e.'index ZONDER gep' IS NOT NULL
+WHERE e."index ZONDER gep" IS NOT NULL
 
 UNION
 
 /* ECOLOGIC COEFFICIENT: status */
 
 SELECT
-  e.'Deelmonster ID'                    AS eventID,
+  e."Deelmonster ID"                    AS eventID,
   'status'                              AS measurementType,
   CASE 
     WHEN e.status = 'DEFAU' THEN 'default'
@@ -324,12 +324,12 @@ SELECT
   v.deelmonster_id                      AS eventID,
   'submerged plants at ' || interval || ' from shore' AS measurementType,
   CASE
-    WHEN v.'Submers Code' = 0 THEN 'none' -- Geen ondergedoken vegetatie
-    WHEN v.'Submers Code' = 1 THEN 'rare' -- Planten schaars
-    WHEN v.'Submers Code' = 2 THEN 'frequent to abundant' -- Planten frequent tot talrijk maar niet de gehele waterkolom opvullend
-    WHEN v.'Submers Code' = 3 THEN 'filling entire water column' -- Waterkolom grotendeels tot geheel opgevuld
+    WHEN v."Submers Code" = 0 THEN 'none' -- Geen ondergedoken vegetatie
+    WHEN v."Submers Code" = 1 THEN 'rare' -- Planten schaars
+    WHEN v."Submers Code" = 2 THEN 'frequent to abundant' -- Planten frequent tot talrijk maar niet de gehele waterkolom opvullend
+    WHEN v."Submers Code" = 3 THEN 'filling entire water column' -- Waterkolom grotendeels tot geheel opgevuld
   END                                   AS measurementValue,
   NULL                                  AS measurementUnit,
   v.opmerking                           AS measurementRemarks
 FROM vegetations as v
-WHERE v.'Submers Code' IS NOT NULL
+WHERE v."Submers Code" IS NOT NULL

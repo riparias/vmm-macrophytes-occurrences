@@ -32,10 +32,10 @@ SELECT
   END                                   AS stateProvince,
   l.gemeente                            AS municipality,
   CASE
-    WHEN f.'Diepte Minimum (cm)' IS NULL THEN 0
-    ELSE CAST(f.'Diepte Maximum (cm)' AS REAL) / 100
+    WHEN f."Diepte Minimum (cm)" IS NULL THEN 0
+    ELSE CAST(f."Diepte Maximum (cm)" AS REAL) / 100
   END                                   AS minimumDepthInMeters,
-  CAST(f.'Diepte Maximum (cm)' AS REAL) / 100 AS maximumDepthInMeters,
+  CAST(f."Diepte Maximum (cm)" AS REAL) / 100 AS maximumDepthInMeters,
   l.omschrijving                        AS locationRemarks,
   printf('%.5f', ROUND(l.decimalLatitude, 5)) AS decimalLatitude,
   printf('%.5f', ROUND(l.decimalLongitude, 5)) AS decimalLongitude,
