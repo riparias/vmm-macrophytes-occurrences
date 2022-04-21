@@ -2,6 +2,7 @@
 title: "Darwin Core mapping of VMM macrophytes data"
 author:
 - Damiano Oldoni
+- Peter Desmet
 date: "`r Sys.Date()`"
 output:
   html_document:
