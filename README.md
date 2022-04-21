@@ -8,7 +8,7 @@ This repository contains the functionality to standardize the macrophytes data o
 
 [source data](data/raw) → Darwin Core [mapping script](src/dwc_mapping.Rmd) using [SQL](sql) → generated [Darwin Core files](data/processed)
 
-For on overview of the mapping of the different sheet, see [issue 23](https://github.com/riparias/vmm-macrophytes-occurrences/issues/23).
+For an overview of the mapping of the fields, see [issue 23](https://github.com/riparias/vmm-macrophytes-occurrences/issues/23).
 
 ## Published dataset
 
