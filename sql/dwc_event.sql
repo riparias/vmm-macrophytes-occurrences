@@ -11,7 +11,6 @@ SELECT
   NULL                                  AS datasetID,
   'VMM'                                 AS institutionCode,
   'Inland water macrophyte occurrences in Flanders, Belgium' AS datasetName,
-  'HumanObservation'                    AS basisOfRecord,
 -- EVENT
   f.deelmonster_id                      AS eventID,
   date(f.monsternamedatum)              AS eventDate,

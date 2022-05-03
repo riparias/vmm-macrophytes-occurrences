@@ -4,6 +4,8 @@ Created by Damiano Oldoni (INBO)
 
 SELECT
   o.deelmonster_id                      AS eventID,
+-- RECORD-LEVEL
+  'HumanObservation'                    AS basisOfRecord,
 -- OCCURRENCE
   o.deelmonster_id || ':' || o.species_name_hash AS occurrenceID,
   l.team                                AS recordedBy,
