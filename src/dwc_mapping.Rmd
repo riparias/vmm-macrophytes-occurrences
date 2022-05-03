@@ -89,16 +89,18 @@ locations <-
 head(locations)
 ```
 
-## Generate hashes for species names
+## Generate hashes for species names and growth forms
 
-We generate a hash based on the species name as saved in column `Macrofyt Naam`. This is needed to create a unique `occurrenceID` of the form `eventID:hash` where `eventID` is the unique identifier of the event as defined in column `deelmonster_id`. As long as the species name doesn't change, the hash and so the `occurrenceID` will be stable:
+We generate a hash based on the combination of species name as saved in column `Macrofyt Naam` and growth form as saved in column `groeivorm`. This is needed to create a unique `occurrenceID` of the form `eventID:hash` where `eventID` is the unique identifier of the event as defined in column `deelmonster_id`. As long as the combination of species name and growth form doesn't change, the hash and so the `occurrenceID` will be stable:
 
 ```{r generate_hashes}
 vdigest <- Vectorize(digest)
 # Generate hashes
 observations <-
   observations %>% 
-  mutate(species_name_hash = vdigest (.data$`Macrofyt Naam`, algo = "md5"))
+  mutate(species_name_hash = vdigest(paste0(.data$`Macrofyt Naam`,
+                                            .data$groeivorm),
+                                     algo = "md5"))
 ```
 
 # Create database
