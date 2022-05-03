@@ -322,7 +322,7 @@ UNION
 
 SELECT
   v.deelmonster_id                      AS eventID,
-  'submerged plants at ' || interval || ' from shore' AS measurementType,
+  'submerged plants ' || interval || ' upstream' AS measurementType,
   CASE
     WHEN v."Submers Code" = 0 THEN 'none' -- Geen ondergedoken vegetatie
     WHEN v."Submers Code" = 1 THEN 'rare' -- Planten schaars
