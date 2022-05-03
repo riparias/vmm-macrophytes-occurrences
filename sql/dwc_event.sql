@@ -15,6 +15,7 @@ SELECT
 -- EVENT
   f.deelmonster_id                      AS eventID,
   date(f.monsternamedatum)              AS eventDate,
+  'transect monitoring'                 AS samplingProtocol,
 -- LOCATION
   f.meetplaats                          AS locationID,
   'Europe'                              AS continent,
@@ -40,7 +41,7 @@ SELECT
   printf('%.5f', ROUND(l.decimalLatitude, 5)) AS decimalLatitude,
   printf('%.5f', ROUND(l.decimalLongitude, 5)) AS decimalLongitude,
   'WGS84'                               AS geodeticDatum,
-  30                                    AS coordinateUncertaintyInMeters,
+  100                                   AS coordinateUncertaintyInMeters, -- 100m transects
   l.Y                                   AS verbatimLatitude,
   l.X                                   AS verbatimLongitude,
   'EPSG:31370'                          AS verbatimSRS,
