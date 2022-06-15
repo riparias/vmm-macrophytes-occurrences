@@ -12,8 +12,8 @@ For an overview of the mapping of the fields, see [issue 23](https://github.com/
 
 ## Published dataset
 
-* [Dataset on the IPT](#) - TBD
-* [Dataset on GBIF](#) - TBD
+* [Dataset on the IPT](https://ipt.inbo.be/resource?r=vmm-macrophytes-occurrences)
+* [Dataset on GBIF](https://doi.org/10.15468/8e9te4)
 
 ## Repo structure
 
