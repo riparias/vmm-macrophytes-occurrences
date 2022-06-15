@@ -8,7 +8,7 @@ SELECT
   'https://creativecommons.org/licenses/by/4.0/' AS license,
   'VMM'                                 AS rightsHolder,
   'http://www.inbo.be/en/norms-for-data-use' AS accessRights,
-  NULL                                  AS datasetID,
+  'https://doi.org/10.15468/8e9te4'     AS datasetID,
   'VMM'                                 AS institutionCode,
   'Inland water macrophyte occurrences in Flanders, Belgium' AS datasetName,
 -- EVENT
