@@ -141,6 +141,12 @@ dwc_mof_sql <- glue::glue_sql(readr::read_file(here::here("sql", "dwc_mof.sql"))
 dwc_mof <- DBI::dbGetQuery(con, dwc_mof_sql)
 ```
 
+Disconnect from SQLite database:
+
+```{r disconnect}
+DBI::dbDisconnect(con)
+```
+
 # Save data to CSV
 
 ```{r save_csv}
