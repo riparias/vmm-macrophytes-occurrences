@@ -51,7 +51,7 @@ The source data were provided manually and stored in `data/raw`. If this workflo
 Read source files:
 
 ```{r read_raw_data}
-raw_data_filename <- "macrofyten 2022-03-10T13_18_15.337Z.xlsx"
+raw_data_filename <- "macrofyten 2022-10-04T08_39_42.720Z.xlsx"
 observations <-
   readxl::read_xlsx(here::here("data", "raw", raw_data_filename), sheet = "opnames_lijst") %>%
   mutate(across(everything(), as.character))
