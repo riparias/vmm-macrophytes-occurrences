@@ -5,6 +5,7 @@ Created by Damiano Oldoni (INBO)
 SELECT
 -- RECORD-LEVEL
   'Event'                               AS type,
+  'en'                                  AS language,
   'https://creativecommons.org/licenses/by/4.0/' AS license,
   'VMM'                                 AS rightsHolder,
   'http://www.inbo.be/en/norms-for-data-use' AS accessRights,
@@ -17,7 +18,6 @@ SELECT
   'transect monitoring'                 AS samplingProtocol,
 -- LOCATION
   f.meetplaats                          AS locationID,
-  'Europe'                              AS continent,
   l.waterlichaam                        AS waterBody,
   'BE'                                  AS countryCode,
   CASE
