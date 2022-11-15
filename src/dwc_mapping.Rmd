@@ -148,3 +148,11 @@ write_csv(dwc_event, here::here("data", "processed", "event.csv"), na = "")
 write_csv(dwc_occurrence, here::here("data", "processed", "occurrence.csv"), na = "")
 write_csv(dwc_mof, here::here("data", "processed", "mof.csv"), na = "")
 ```
+
+# Test output
+
+Load tests and run them to validate the DwC mapping:
+
+```{r run_tests}
+source(here::here("tests", "test_dwc_event_occurrence_mof.R"))
+```
