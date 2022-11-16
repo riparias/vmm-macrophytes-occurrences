@@ -33,6 +33,9 @@ The repository structure is based on [Cookiecutter Data Science](http://drivenda
 │   ├── dwc_occurrence.sql
 │   └── dwc_mof.sql
 |
+├── tests
+│   └── test_dwc_event_occurrence_mof.R : Tests to check DwC mapping
+|
 └── data
     ├── raw                : Source data, input for mapping script
     └── processed          : Darwin Core output of mapping script GENERATED

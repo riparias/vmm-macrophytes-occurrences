@@ -321,15 +321,18 @@ UNION
 /* VEGETATION DEVELOPMENT */
 
 SELECT
-  v.deelmonster_id                      AS eventID,
+  f.deelmonster_id                      AS eventID,
   'submerged plants ' || interval || ' upstream' AS measurementType,
   CASE
     WHEN v."Submers Code" = 0 THEN 'none' -- Geen ondergedoken vegetatie
     WHEN v."Submers Code" = 1 THEN 'rare' -- Planten schaars
     WHEN v."Submers Code" = 2 THEN 'frequent to abundant' -- Planten frequent tot talrijk maar niet de gehele waterkolom opvullend
     WHEN v."Submers Code" = 3 THEN 'filling entire water column' -- Waterkolom grotendeels tot geheel opgevuld
+    ELSE NULL    
   END                                   AS measurementValue,
   NULL                                  AS measurementUnit,
   v.opmerking                           AS measurementRemarks
-FROM vegetations as v
+FROM features AS f
+  LEFT JOIN vegetations AS v
+    ON f.deelmonster_id = v.deelmonster_id
 WHERE v."Submers Code" IS NOT NULL
