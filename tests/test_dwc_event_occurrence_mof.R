@@ -89,10 +89,6 @@ testthat::test_that("countryCode is always filled in", {
   testthat::expect_true(all(!is.na(dwc_event$countryCode)))
 })
 
-testthat::test_that("locationRemarks is always filled in", {
-  testthat::expect_true(all(!is.na(dwc_event$locationRemarks)))
-})
-
 testthat::test_that("geodeticDatum is always filled in and equal to WGS84", {
   testthat::expect_true(all(!is.na(dwc_event$geodeticDatum)))
   testthat::expect_equal(unique(dwc_event$geodeticDatum), "WGS84")
@@ -108,3 +104,134 @@ testthat::test_that("coordinateUncertaintyInMeters is always filled in and equal
   testthat::expect_equal(unique(dwc_event$coordinateUncertaintyInMeters), 100)
 })
 
+
+# test occurrence extension
+
+testthat::test_that("Right columns in right order in occurrence extension", {
+  columns_occ <- c(
+    "eventID",
+    "basisOfRecord",
+    "occurrenceID",
+    "recordedBy",
+    "organismQuantity",
+    "organismQuantityType",
+    "occurrenceRemarks",
+    "identifiedBy",
+    "identificationVerificationStatus",
+    "scientificName",
+    "kingdom",
+    "taxonRank",
+    "vernacularName"
+  )
+  testthat::expect_equal(names(dwc_occurrence), columns_occ)
+})
+
+testthat::test_that(
+  "occurrenceID is always present and is unique in occurrence extension", {
+    testthat::expect_true(all(!is.na(dwc_occurrence$occurrenceID)))
+    testthat::expect_equal(length(unique(dwc_occurrence$occurrenceID)),
+                           nrow(dwc_occurrence)
+    )
+  })
+
+testthat::test_that("eventID is always present in occurrence extension", {
+  testthat::expect_true(all(!is.na(dwc_occurrence$eventID)))
+})
+
+testthat::test_that("All eventIDs are in event core ", {
+  testthat::expect_true(all(dwc_occurrence$eventID %in% dwc_event$eventID))
+})
+
+testthat::test_that(
+  "basisOfRecord is always filled in and is 'HumanObservation'", {
+  testthat::expect_true(all(!is.na(dwc_occurrence$basisOfRecord)))
+  testthat::expect_equal(unique(dwc_occurrence$basisOfRecord),
+                         "HumanObservation"
+  )
+})
+
+testthat::test_that("recordedBy is always filled in", {
+    testthat::expect_true(all(!is.na(dwc_occurrence$recordedBy)))
+})
+
+testthat::test_that("organismQuantity is always filled in and one in list", {
+  testthat::expect_true(all(!is.na(dwc_occurrence$organismQuantity)))
+  testthat::expect_equal(
+    unique(dwc_occurrence$organismQuantity),
+    c("o", "s", "la", "f", "a", "c", "d")
+  )
+})
+
+testthat::test_that(
+  "organismQuantityType is always filled in and is 'Tansley vegetation scale'", 
+  {
+    testthat::expect_true(all(!is.na(dwc_occurrence$organismQuantityType)))
+    testthat::expect_equal(
+      unique(dwc_occurrence$organismQuantityType),
+      "Tansley vegetation scale"
+    )
+  }
+)
+
+testthat::test_that("occurrenceRemarks starts always with 'growth form'", {
+  testthat::expect_equal(
+    unique(substring(dwc_occurrence$occurrenceRemarks, 1, 11)),
+    "growth form"
+  )
+})
+
+
+testthat::test_that("identificationVerificationStatus is always present and is 'verified'", {
+  testthat::expect_true(
+    all(!is.na(dwc_occurrence$identificationVerificationStatus))
+  )
+  testthat::expect_equal(
+    unique(dwc_occurrence$identificationVerificationStatus),
+    "verified"
+  )
+})
+
+testthat::test_that("kingdom is always filled in and is always Plantae", {
+  testthat::expect_true(all(!is.na(dwc_occurrence$kingdom)))
+  testthat::expect_equal(unique(dwc_occurrence$kingdom), "Plantae")
+})
+
+testthat::test_that("taxonRank is always filled in", {
+  testthat::expect_true(all(!is.na(dwc_occurrence$taxonRank)))
+})
+
+testthat::test_that("scientificName is always filled in", {
+  testthat::expect_true(all(!is.na(dwc_occurrence$scientificName)))
+})
+
+
+# test mof extension
+
+testthat::test_that("Right columns in right order in mof extension", {
+  columns_mof <- c(
+    "eventID",
+    "measurementType",
+    "measurementValue",
+    "measurementUnit",
+    "measurementRemarks"
+  )
+  testthat::expect_equal(names(dwc_mof), columns_mof)
+})
+
+testthat::test_that("eventID is always present in mof extension", {
+  testthat::expect_true(all(!is.na(dwc_mof$eventID)))
+})
+
+testthat::test_that("All eventIDs are in event core ", {
+  testthat::expect_true(all(dwc_mof$eventID %in% dwc_event$eventID))
+})
+
+testthat::test_that("measurementType is always filled in", {
+  testthat::expect_true(all(!is.na(dwc_mof$measurementType)))
+})
+
+testthat::test_that("measurementUnit is one of the list", {
+  testthat::expect_equal(unique(dwc_mof$measurementUnit),
+                         c("cm", NA, "mg/L", "µS/cm", "%", "°C")
+  )
+})
