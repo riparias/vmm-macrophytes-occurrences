@@ -11,7 +11,7 @@ SELECT
   'http://www.inbo.be/en/norms-for-data-use' AS accessRights,
   'https://doi.org/10.15468/8e9te4'     AS datasetID,
   'VMM'                                 AS institutionCode,
-  'Inland water macrophyte occurrences in Flanders, Belgium' AS datasetName,
+  'VMM - Inland water macrophyte occurrences in Flanders, Belgium' AS datasetName,
 -- EVENT
   f.deelmonster_id                      AS eventID,
   date(f.monsternamedatum)              AS eventDate,
